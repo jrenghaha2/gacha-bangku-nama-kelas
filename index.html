@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#fffdf0">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>Gacha Bangku</title>
+    <title>Gacha Bangku Kelas</title>
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* --- PALET WARNA CRAYON --- */
+            /* --- PALET WARNA --- */
             --paper-bg: #fffdf0;
             --ink-color: #2c3e50;
             
-            /* Gradasi Crayon */
             --grad-blue: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
             --grad-teal: linear-gradient(135deg, #22a6b3 0%, #7ed6df 100%);
             --grad-orange: linear-gradient(135deg, #f0932b 0%, #ffbe76 100%);
@@ -22,7 +19,6 @@
             --grad-red: linear-gradient(135deg, #eb4d4b 0%, #ff7979 100%);
             --grad-wood: linear-gradient(160deg, #8d6e63 0%, #5d4037 100%);
 
-            /* Warna Solid */
             --c-blue: #4834d4;
             --c-teal: #22a6b3;
             --c-orange: #f0932b;
@@ -30,16 +26,7 @@
             --c-red: #eb4d4b;
             --c-green: #6ab04c;
 
-            /* Tekstur Arsir Pensil */
-            --texture-pencil: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 5px,
-                rgba(0,0,0,0.02) 5px,
-                rgba(0,0,0,0.02) 6px
-            );
-
-            /* Warna Latar Lembut */
+            --texture-pencil: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.02) 5px, rgba(0,0,0,0.02) 6px);
             --wash-blue: linear-gradient(to bottom right, rgba(72, 52, 212, 0.05), rgba(72, 52, 212, 0.15));
             --wash-teal: linear-gradient(to bottom right, rgba(34, 166, 179, 0.05), rgba(34, 166, 179, 0.15));
             --wash-orange: linear-gradient(to bottom right, rgba(240, 147, 43, 0.05), rgba(240, 147, 43, 0.15));
@@ -53,72 +40,63 @@
         body {
             font-family: 'Patrick Hand', cursive;
             background-color: var(--paper-bg);
-            background-image: 
-                radial-gradient(#dcdde1 1px, transparent 1px),
-                var(--texture-pencil);
+            background-image: radial-gradient(#dcdde1 1px, transparent 1px), var(--texture-pencil);
             background-size: 20px 20px, 100% 100%;
             min-height: 100vh; margin: 0; padding: 10px;
             color: var(--ink-color);
-            overflow-x: hidden; /* Mencegah scroll samping global */
+            overflow-x: hidden;
         }
 
         .container { width: 100%; max-width: 1200px; margin: 0 auto; position: relative; }
 
-        /* HEADER */
+        /* --- HEADER (PERBAIKAN POSISI MEJA) --- */
         .header-section { 
             display: flex; 
-            align-items: center; 
-            justify-content: center;
-            margin-bottom: 20px; 
-            position: relative; 
+            align-items: flex-end; /* Supaya rata bawah */
+            justify-content: flex-start; /* KUNCI: Rata Kiri (Depan Bangku 1) */
+            margin-bottom: 25px; 
+            padding-left: 10px; /* Sesuaikan dengan padding grid agar lurus */
+            gap: 30px; /* Jarak antara Meja Guru dan Tombol */
             flex-wrap: wrap;
-            gap: 20px;
         }
 
         .teacher-desk {
-            width: 140px; height: 80px;
+            width: 140px; height: 85px;
             background: var(--grad-wood); 
             color: #fff;
             display: flex; justify-content: center; align-items: center;
             text-align: center; font-size: 20px; font-weight: bold;
             border: 3px solid #3e2723; border-radius: 8px 20px 10px 15px; 
-            box-shadow: 4px 4px 0px rgba(62, 39, 35, 0.4); 
+            box-shadow: 6px 6px 0px rgba(62, 39, 35, 0.4); 
             transform: rotate(-1deg);
             text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
             flex-shrink: 0;
+            z-index: 2;
         }
 
         .controls { 
-            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
+            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; 
+            padding-bottom: 5px; /* Sedikit naik biar imbang sama meja */
         }
 
-        /* BASE BUTTON STYLE */
+        /* TOMBOL & UI COMPONENT */
         .btn-sketch, .dropdown-content, .modal-content {
              border: var(--border-thick);
              border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
              box-shadow: var(--sketch-shadow);
              transition: all 0.1s; background: #fff;
              padding: 10px 20px; font-size: 16px; font-weight: bold; cursor: pointer; font-family: inherit;
-             position: relative; overflow: hidden;
-             user-select: none;
+             position: relative; overflow: hidden; user-select: none;
         }
-        
         .btn-sketch:active { transform: scale(0.95); box-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
 
-        /* WARNA TOMBOL */
-        .btn-orange { color: var(--c-orange); }
-        .btn-orange:hover { background: var(--grad-orange); color: white; border-color: #d35400; }
-        
-        .btn-blue { color: var(--c-blue); }
-        .btn-blue:hover, .dropdown-content button:hover { background: var(--grad-blue); color: white; border-color: #192a56; }
+        .btn-orange { color: var(--c-orange); } .btn-orange:hover { background: var(--grad-orange); color: white; border-color: #d35400; }
+        .btn-blue { color: var(--c-blue); } .btn-blue:hover, .dropdown-content button:hover { background: var(--grad-blue); color: white; border-color: #192a56; }
+        .btn-purple { color: var(--c-purple); } .btn-purple:hover { background: var(--grad-purple); color: white; border-color: #8e44ad; }
 
-        .btn-purple { color: var(--c-purple); }
-        .btn-purple:hover { background: var(--grad-purple); color: white; border-color: #8e44ad; }
-
-        /* DROPDOWN */
         .dropdown { position: relative; }
         .dropdown-content { 
-            display: none; position: absolute; top: 115%; left: 50%; transform: translateX(-50%);
+            display: none; position: absolute; top: 115%; left: 0; /* Dropdown rata kiri tombol */
             background: #fff; z-index: 50; min-width: 200px; padding: 5px; border-radius: 10px; 
         }
         .dropdown-content button { 
@@ -132,8 +110,7 @@
         /* GRID KELAS */
         .classroom-grid { 
             display: grid; 
-            /* Default Desktop: 6 kolom + label */
-            grid-template-columns: repeat(6, 1fr) 80px; 
+            grid-template-columns: repeat(6, 1fr) 80px; /* 6 Kolom + Label */
             gap: 15px; 
             padding: 10px; 
             align-items: center;
@@ -144,128 +121,70 @@
             font-size: 20px; font-weight: bold; transform: rotate(2deg); 
             text-shadow: 2px 2px 0px rgba(0,0,0,0.05); text-align: center;
         }
-        .label-r0 { color: var(--c-blue); }
-        .label-r1 { color: var(--c-teal); }
-        .label-r2 { color: var(--c-orange); }
+        .label-r0 { color: var(--c-blue); } .label-r1 { color: var(--c-teal); } .label-r2 { color: var(--c-orange); }
 
-        /* BANGKU SKETSA */
+        /* BANGKU */
         .seat {
             aspect-ratio: 4/3; position: relative; display: flex; flex-direction: column;
             justify-content: center; align-items: center; padding: 10px;
-            border: var(--border-thick); 
-            border-radius: 10px 20px 15px 10px;
+            border: var(--border-thick); border-radius: 10px 20px 15px 10px;
             box-shadow: var(--sketch-shadow); transition: all 0.2s; background: #fff;
             min-height: 80px;
         }
-
-        /* WARNA PER BARIS */
         .seat-row-0 { background-image: var(--wash-blue), var(--texture-pencil); }
         .seat-row-1 { background-image: var(--wash-teal), var(--texture-pencil); }
         .seat-row-2 { background-image: var(--wash-orange), var(--texture-pencil); }
 
-        /* TERKUNCI */
         .seat.is-locked {
-            background: var(--grad-yellow) !important;
-            border-color: #f39c12 !important;
+            background: var(--grad-yellow) !important; border-color: #f39c12 !important;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.05), var(--sketch-shadow) !important;
-            transform: none !important;
-            color: #d35400 !important;
+            transform: none !important; color: #d35400 !important;
         }
-        .seat.is-locked .seat-name { text-shadow: 1px 1px 0 rgba(255,255,255,0.5); }
-
         .lock-box {
             position: absolute; top: -8px; right: -8px; width: 32px; height: 32px;
-            border: var(--border-thick); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 14px; background: #fff;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.1); z-index: 2;
+            border: var(--border-thick); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 14px; background: #fff; box-shadow: 2px 2px 0px rgba(0,0,0,0.1); z-index: 2;
         }
-        
         .seat-number { position: absolute; bottom: 5px; left: 8px; font-weight: bold; font-size: 12px; color: rgba(44, 62, 80, 0.4); }
         .seat-name { font-weight: bold; text-align: center; width: 100%; line-height: 1.1; text-transform: uppercase; word-break: break-word;}
         .text-normal { font-size: 18px; } .text-medium { font-size: 16px; } .text-small { font-size: 13px; } .text-tiny { font-size: 11px; }
 
         /* MODAL */
-        .modal { 
-            display: none; position: fixed; z-index: 100; left: 0; top: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(44, 62, 80, 0.5); 
-            backdrop-filter: blur(4px); 
-            overflow-y: auto;
-        }
-        
-        .modal-content { 
-            background: var(--paper-bg); 
-            margin: 10% auto; padding: 20px; width: 90%; max-width: 500px; 
-            transform: rotate(0.5deg); display: flex; flex-direction: column; position: relative;
-            box-shadow: 10px 10px 0 rgba(0,0,0,0.2); border-radius: 10px;
-        }
-        
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.5); backdrop-filter: blur(4px); overflow-y: auto;}
+        .modal-content { background: var(--paper-bg); margin: 10% auto; padding: 20px; width: 90%; max-width: 500px; transform: rotate(0.5deg); display: flex; flex-direction: column; position: relative; box-shadow: 10px 10px 0 rgba(0,0,0,0.2); border-radius: 10px;}
         .close { float: right; font-size: 28px; cursor: pointer; font-weight: bold; color: var(--c-red); padding: 5px; }
-        
-        .manager-input { 
-            width: 100%; padding: 12px; border: var(--border-thick); border-radius: 5px;
-            margin-bottom: 10px; font-family: inherit; font-size: 16px; font-weight: bold; box-sizing: border-box; background: #fff;
-        }
-        
-        .name-list { 
-            max-height: 40vh; overflow-y: auto; border: var(--border-thick); 
-            padding: 10px; border-radius: 5px; background: #fff; margin-top: 10px; flex-grow: 1;
-        }
-        
+        .manager-input { width: 100%; padding: 12px; border: var(--border-thick); border-radius: 5px; margin-bottom: 10px; font-family: inherit; font-size: 16px; font-weight: bold; box-sizing: border-box; background: #fff;}
+        .name-list { max-height: 40vh; overflow-y: auto; border: var(--border-thick); padding: 10px; border-radius: 5px; background: #fff; margin-top: 10px; flex-grow: 1;}
         .name-item { padding: 10px 5px; border-bottom: 2px dashed #e0e0e0; display: flex; justify-content: space-between; align-items: center; font-size: 16px;}
         .name-item.eliminated span { text-decoration: line-through; color: var(--c-red); opacity: 0.6;}
-        
         .item-actions { display: flex; gap: 8px; }
-        .action-btn { 
-            font-size: 16px; padding: 6px 10px; cursor: pointer; background: #fff; font-family: inherit; font-weight: bold;
-            border: 2px solid var(--ink-color); border-radius: 8px;
-        }
+        .action-btn { font-size: 16px; padding: 6px 10px; cursor: pointer; background: #fff; font-family: inherit; font-weight: bold; border: 2px solid var(--ink-color); border-radius: 8px;}
+        #bulkEditArea { width: 100%; padding: 15px; font-family: inherit; font-size: 16px; border: var(--border-thick); border-radius: 5px; min-height: 250px; margin-top: 10px;}
 
-        #bulkEditArea {
-            width: 100%; padding: 15px; font-family: inherit; font-size: 16px;
-            border: var(--border-thick); border-radius: 5px;
-            min-height: 250px; margin-top: 10px;
-        }
-
-        /* --- MOBILE RESPONSIVE (ANDROID FRIENDLY) --- */
+        /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
             .header-section {
-                flex-direction: column;
-                margin-bottom: 20px;
+                flex-direction: column; /* Stack vertikal */
+                align-items: center; /* Tengah secara horizontal */
+                gap: 15px;
+                padding-left: 0; /* Reset padding kiri */
             }
-            .teacher-desk { margin-right: 0; margin-bottom: 15px; transform: rotate(0deg); width: 100%; max-width: 200px;}
-            
-            .controls { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-            .dropdown { grid-column: span 2; }
+            .teacher-desk { 
+                width: 100%; max-width: 250px; 
+                margin-right: 0; transform: rotate(0deg);
+                box-shadow: 4px 4px 0px rgba(62, 39, 35, 0.4); 
+            }
+            .controls { justify-content: center; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .dropdown { grid-column: span 2; } 
             .dropdown button { width: 100%; }
+            .dropdown-content { left: 50%; transform: translateX(-50%); width: 90%; } /* Dropdown tengah di HP */
 
-            /* Ubah Grid Kelas jadi 2 Kolom untuk HP Portrait */
-            .classroom-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 kursi per baris */
-                gap: 10px;
-                padding: 5px;
-            }
-
-            /* Label Baris jadi pemisah (full width) */
-            .row-label {
-                grid-column: span 2; /* Label ambil lebar penuh */
-                order: 100; /* Trik agar label tetap di flow yang benar, nanti diatur JS */
-                margin-top: 20px;
-                border-bottom: 2px dashed rgba(0,0,0,0.1);
-                padding-bottom: 5px;
-                transform: rotate(0deg);
-                font-size: 18px;
-            }
-            
-            /* Sembunyikan label, kita pindahkan manual atau biarkan di bawah grup */
-            /* Karena struktur HTML-nya flat, kita biarkan Grid auto-flow */
-            /* Kita akan gunakan order di CSS tidak bisa spesifik per grup, jadi biarkan mengalir */
-            
+            /* Grid 2 Kolom untuk HP */
+            .classroom-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 5px; }
+            .row-label { grid-column: span 2; order: 100; margin-top: 20px; border-bottom: 2px dashed rgba(0,0,0,0.1); padding-bottom: 5px; transform: rotate(0deg); font-size: 18px; }
             .seat { aspect-ratio: unset; min-height: 90px; }
             .seat-name { font-size: 16px; } 
         }
-
     </style>
 </head>
 <body>
@@ -302,19 +221,15 @@
         
         <div id="normalView">
             <div class="info-count">Siswa: <span id="studentCount">0</span>/18</div>
-
             <div style="display:flex; gap:10px; margin-top: 10px;">
                 <input type="text" id="newNameInput" class="manager-input" style="margin:0;" placeholder="Nama siswa..." onkeypress="handleEnter(event)">
                 <button id="btnAdd" class="btn-sketch btn-purple" style="padding:10px 15px; font-size: 24px; line-height:0.5;" onclick="addName()">+</button>
             </div>
-            
             <div style="display:flex; justify-content:space-between; margin-top:10px;">
                  <input type="text" id="searchInput" class="manager-input" style="margin:0; font-size:14px; padding:8px;" placeholder="🔍 Cari..." onkeyup="renderNameList()">
                  <button class="action-btn" style="color:var(--c-blue); border-color:var(--c-blue); margin-left:5px;" onclick="showBulkEdit()">📝 Bulk</button>
             </div>
-
             <div class="name-list" id="nameListContainer"></div>
-
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top: 15px;">
                 <button class="btn-sketch" style="font-size:14px; padding: 8px; color:var(--c-red);" onclick="eliminateAll()">🚫 Absen Semua</button>
                 <button class="btn-sketch" style="font-size:14px; padding: 8px; color:var(--c-green);" onclick="restoreAll()">✅ Hadir Semua</button>
@@ -346,7 +261,6 @@
     let masterNames = defaultNames.map(name => ({ name: name, active: true }));
     let seats = [];
 
-    // --- ESC KEY LISTENER ---
     document.addEventListener('keydown', function(event) {
         if (event.key === "Escape") {
             const modal = document.getElementById('managerModal');
@@ -366,20 +280,13 @@
         const container = document.getElementById('classroom');
         container.innerHTML = '';
         
-        // Logika Render: Kita buat blok per baris (row) agar di Mobile label bisa nyempil di antaranya
         for (let row = 0; row < 3; row++) {
-            
-            // Render 6 bangku untuk row ini
             for (let col = 0; col < 6; col++) {
                 const index = row * 6 + col;
                 const seatData = seats[index];
-                
                 const seatDiv = document.createElement('div');
                 const randomRotate = (Math.random() * 1.5 - 0.75).toFixed(2); 
-                
                 if(!seatData.locked) seatDiv.style.transform = `rotate(${randomRotate}deg)`;
-                
-                // Tambahkan kelas khusus 'seat-item' untuk targeting CSS jika perlu
                 seatDiv.className = `seat seat-row-${row} ${seatData.locked ? 'is-locked' : ''}`;
                 
                 const lockBox = document.createElement('div');
@@ -392,13 +299,11 @@
                 numSpan.innerText = col + 1;
 
                 const nameDiv = document.createElement('div');
-                // Auto resize text
                 const nameLen = seatData.currentName.length;
                 let sizeClass = "text-normal";
                 if (nameLen > 25) sizeClass = "text-tiny";
                 else if (nameLen > 18) sizeClass = "text-small";
                 else if (nameLen > 12) sizeClass = "text-medium";
-                
                 nameDiv.className = `seat-name ${sizeClass}`;
                 nameDiv.innerText = seatData.currentName;
 
@@ -407,10 +312,6 @@
                 seatDiv.appendChild(nameDiv);
                 container.appendChild(seatDiv);
             }
-            
-            // Label Baris ditaruh setelah 6 bangku
-            // Di Desktop: ini masuk kolom ke-7
-            // Di Mobile: ini kita paksa span-2 supaya jadi separator
             const label = document.createElement('div');
             label.className = `row-label label-r${row}`;
             label.innerText = `BARIS ${row + 1}`;
@@ -425,23 +326,11 @@
     }
 
     function distributeNames() {
-        // Ambil nama yang terkunci
         let lockedNames = seats.filter(s => s.locked && s.currentName).map(s => s.currentName);
-        
-        // Ambil nama tersedia (Active = true DAN belum terkunci)
-        let availableNames = masterNames
-            .filter(n => n.active)
-            .map(n => n.name)
-            .filter(name => !lockedNames.includes(name));
-        
+        let availableNames = masterNames.filter(n => n.active).map(n => n.name).filter(name => !lockedNames.includes(name));
         shuffleArray(availableNames);
-        
-        // Isi bangku yang TIDAK terkunci
         let targetSeats = seats.filter(s => !s.locked).sort((a,b) => a.id - b.id);
-        
-        targetSeats.forEach(seat => { 
-            seat.currentName = availableNames.length > 0 ? availableNames.shift() : ""; 
-        });
+        targetSeats.forEach(seat => { seat.currentName = availableNames.length > 0 ? availableNames.shift() : ""; });
     }
 
     function shuffleSpecificRows(rowIndices) {
@@ -458,17 +347,9 @@
     }
 
     function shuffleAll() { distributeNames(); renderSeats(); }
-    
-    // Algoritma Fisher-Yates Shuffle
-    function shuffleArray(array) { 
-        for (let i = array.length - 1; i > 0; i--) { 
-            const j = Math.floor(Math.random() * (i + 1)); 
-            [array[i], array[j]] = [array[j], array[i]]; 
-        } 
-    }
+    function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
 
     function toggleDropdown() { document.getElementById("rowDropdown").classList.toggle("show"); }
-    
     window.onclick = function(e) { 
         if (!e.target.matches('#btnRowRandom')) {
             let dp = document.getElementById("rowDropdown");
@@ -477,12 +358,9 @@
         if (e.target == document.getElementById('managerModal')) closeManager();
     }
 
-    // --- MANAGER LOGIC ---
-
     function openManager() { document.getElementById('managerModal').style.display = "block"; hideBulkEdit(); renderNameList(); }
     function closeManager() { 
         document.getElementById('managerModal').style.display = "none";
-        // Bersihkan bangku dari nama yang dinonaktifkan
         seats.forEach(seat => {
             const person = masterNames.find(n => n.name === seat.currentName);
             if (!person || !person.active) { seat.currentName = ""; seat.locked = false; }
@@ -505,19 +383,10 @@
     function saveBulkEdit() {
         const rawText = document.getElementById('bulkEditArea').value;
         const newNamesList = rawText.split('\n').map(s => s.trim().toUpperCase()).filter(s => s !== "");
-
-        if (newNamesList.length > 18) {
-            alert(`Terlalu banyak! Ada ${newNamesList.length} nama. Maksimal 18.`);
-            return;
-        }
-
+        if (newNamesList.length > 18) { alert(`Terlalu banyak! Ada ${newNamesList.length} nama. Maksimal 18.`); return; }
         if (confirm("Simpan data ini?")) {
             masterNames = newNamesList.map(name => ({ name: name, active: true }));
-            hideBulkEdit();
-            renderNameList();
-            seats.forEach(s => { s.currentName = ""; s.locked = false; }); 
-            distributeNames(); 
-            renderSeats();
+            hideBulkEdit(); renderNameList(); seats.forEach(s => { s.currentName = ""; s.locked = false; }); distributeNames(); renderSeats();
         }
     }
     
@@ -527,15 +396,11 @@
     function resetToDefault() {
         if(confirm("Reset ke 18 nama asli?")) {
             masterNames = defaultNames.map(name => ({ name: name, active: true }));
-            renderNameList();
-            seats.forEach(s => { s.currentName = ""; s.locked = false; });
-            distributeNames(); 
-            renderSeats();
+            renderNameList(); seats.forEach(s => { s.currentName = ""; s.locked = false; }); distributeNames(); renderSeats();
         }
     }
 
     function handleEnter(e) { if(e.key === 'Enter') addName(); }
-
     function addName() {
         if (masterNames.length >= 18) { alert("Kelas penuh!"); return; }
         const input = document.getElementById('newNameInput');
@@ -543,13 +408,7 @@
         if(val) { masterNames.push({name: val, active: true}); input.value=''; renderNameList(); }
     }
 
-    function deleteName(index) {
-        if(confirm(`Hapus: ${masterNames[index].name}?`)) {
-            masterNames.splice(index, 1);
-            renderNameList();
-        }
-    }
-
+    function deleteName(index) { if(confirm(`Hapus: ${masterNames[index].name}?`)) { masterNames.splice(index, 1); renderNameList(); }}
     function editName(index) {
         const oldName = masterNames[index].name;
         const newName = prompt("Ganti Nama:", oldName);
@@ -570,7 +429,6 @@
         countSpan.innerText = masterNames.length;
         btnAdd.disabled = masterNames.length >= 18;
         btnAdd.style.opacity = masterNames.length >= 18 ? "0.5" : "1";
-
         list.innerHTML = '';
         masterNames.forEach((item, idx) => {
             if(item.name.toLowerCase().includes(query)) {
@@ -581,11 +439,7 @@
                     <div class="item-actions">
                         <button class="action-btn btn-edit" style="color:var(--c-blue); border-color:var(--c-blue);" onclick="editName(${idx})">✎</button>
                         <button class="action-btn btn-del" style="color:var(--c-red); border-color:var(--c-red);" onclick="deleteName(${idx})">🗑️</button>
-                        <button class="action-btn" 
-                            style="color:${item.active ? 'var(--c-red)' : 'var(--c-green)'}; border-color:${item.active ? 'var(--c-red)' : 'var(--c-green)'}" 
-                            onclick="toggleActive(${idx})">
-                            ${item.active ? 'X' : '✓'}
-                        </button>
+                        <button class="action-btn" style="color:${item.active ? 'var(--c-red)' : 'var(--c-green)'}; border-color:${item.active ? 'var(--c-red)' : 'var(--c-green)'}" onclick="toggleActive(${idx})">${item.active ? 'X' : '✓'}</button>
                     </div>
                 `;
                 list.appendChild(div);
