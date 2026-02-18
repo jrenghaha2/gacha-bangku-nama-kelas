@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gacha Bangku: Guild Edition </title>
+    <title>Gacha Bangku: Guild Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -126,7 +126,7 @@
 
         .char-img-container {
             width: 100%; height: 70%; overflow: hidden; position: relative;
-            background-color: rgba(255,255,255,0.05); /* Placeholder color */
+            background-color: rgba(255,255,255,0.05);
         }
         
         .char-img {
@@ -291,34 +291,18 @@
 </div>
 
 <script>
-    // 1. SESSION SEED (Membuat avatar berubah setiap kali web direfresh/dibuka)
     const sessionSeed = Math.floor(Math.random() * 10000);
 
-    // 2. DATABASE GENDER (Survey nama)
-    // F = Female (Rambut Panjang), M = Male (Rambut Pendek)
     const knownGenders = {
-        "RAHMA KAMILA": "F",
-        "TASYA INTAN R.": "F",
-        "AKHSIN AMIRULLOH": "M",
-        "ZERLINA DIAH M.": "F",
-        "YEHEZKIEL RAMLAN": "M",
-        "MAYANG MELDA D.": "F",
-        "JESSICA PUTRI N.": "F",
-        "GALIH TRI P.": "M",
-        "ALIM MURSID": "M",
-        "FARIHA NUR AZIZAH": "F",
-        "CALVIN JEREMIA": "M",
-        "LUKMAN HARIS M.": "M",
-        "DESPIA ALIYAWATI": "F",
-        "FAIQ ATA AMRU": "M",
-        "ESTHER ANGGUN S.": "F",
-        "REGA RINDIANA": "F",
-        "DENDRA RAMADANI": "M",
-        "MOHAMMAD IBAD F.": "M"
+        "RAHMA KAMILA": "F", "TASYA INTAN R.": "F", "AKHSIN AMIRULLOH": "M",
+        "ZERLINA DIAH M.": "F", "YEHEZKIEL RAMLAN": "M", "MAYANG MELDA D.": "F",
+        "JESSICA PUTRI N.": "F", "GALIH TRI P.": "M", "ALIM MURSID": "M",
+        "FARIHA NUR AZIZAH": "F", "CALVIN JEREMIA": "M", "LUKMAN HARIS M.": "M",
+        "DESPIA ALIYAWATI": "F", "FAIQ ATA AMRU": "M", "ESTHER ANGGUN S.": "F",
+        "REGA RINDIANA": "F", "DENDRA RAMADANI": "M", "MOHAMMAD IBAD F.": "M"
     };
 
     const defaultNames = Object.keys(knownGenders);
-
     let masterNames = defaultNames.map(name => ({ name: name, active: true }));
     let seats = [];
 
@@ -389,7 +373,7 @@
         if (e.target == document.getElementById('managerModal')) goBack();
     }
 
-    // --- AVATAR & GENDER LOGIC ---
+    // --- AVATAR & GENDER LOGIC (PNG MODE) ---
     
     function detectGender(name) {
         if (knownGenders[name]) return knownGenders[name];
@@ -403,24 +387,27 @@
         const gender = detectGender(name);
         const seed = name + "_" + sessionSeed; 
         
-        // GUNAKAN VERSI 7.x (LEBIH STABIL) DAN STYLE 'PERSONAS' (LEBIH SIMPEL)
-        // Jika style ini gagal, fungsi 'handleImageError' di bawah akan otomatis menggantinya.
-        let url = `https://api.dicebear.com/7.x/personas/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf`;
+        // PAKE FORMAT PNG BIAR KOMPATIBEL SAMA SEMUA BROWSER/JARINGAN
+        // Style 'avataaars' paling aman buat gender
+        let url = `https://api.dicebear.com/9.x/avataaars/png?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf`;
         
         if (gender === "F") {
-            url += "&hair=long,bob,curly,curlyHigh,straight"; // Cewek: Rambut Panjang
+            // Cewek: Paksa rambut panjang, tanpa kumis
+            url += "&top=longHair,longHairBob,longHairBun,longHairCurly,longHairStraight,longHairStraight2";
             url += "&facialHair=none"; 
         } else {
-            url += "&hair=short,balding,buzz,fade,sideShave"; // Cowok: Rambut Pendek
-            url += "&facialHairProbability=50"; // Cowok: Kadang jenggotan
+            // Cowok: Paksa rambut pendek
+            url += "&top=shortHair,shortHairDreads01,shortHairDreads02,shortHairFrizzle,shortHairShaggyMullet,shortHairShortCurly,shortHairShortFlat,shortHairShortRound,shortHairShortWaved,shortHairSides,shortHairTheCaesar";
+            // Random kumis/jenggot dikit biar variatif
+            url += "&facialHairProbability=20"; 
         }
         
         return url;
     }
 
-    // FUNGSI FALLBACK: Kalau gambar rusak, ganti ke Inisial Nama (UI Avatars)
+    // FALLBACK KALAU DICEBEAR MATI/ERROR -> PAKE INISIAL NAMA
     function handleImageError(img, name) {
-        img.onerror = null; // Prevent infinite loop
+        img.onerror = null;
         img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128&bold=true`;
     }
 
@@ -455,11 +442,10 @@
                 if(row === 1) stars = "★★★★";
                 if(row === 2) stars = "★★★";
 
-                // Tambahkan 'onerror="handleImageError(this, ...)"' untuk fallback otomatis
                 seatDiv.innerHTML = `
                     <div class="lock-box" onclick="toggleLock(${index}, event)">${lockIcon}</div>
                     <div class="char-img-container">
-                        <img src="${avatarUrl}" class="char-img" alt="" onerror="handleImageError(this, '${nameHTML}')">
+                        <img src="${avatarUrl}" class="char-img" alt="Hero" loading="lazy" onerror="handleImageError(this, '${nameHTML}')">
                     </div>
                     <div class="char-info">
                         <div class="seat-name ${sizeClass}">${nameHTML}</div>
