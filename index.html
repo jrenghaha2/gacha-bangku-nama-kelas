@@ -3,180 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Denah Kelas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <title>Gacha Bangku: Guild Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* --- PALET WARNA --- */
-            --paper-bg: #fffdf0;
-            --ink-color: #2c3e50;
+            /* --- TEYVAT PALETTE --- */
+            --bg-void: #181b2a;
+            --bg-star: #252a40;
+            --ui-panel: #e3e5e8;
+            --ui-dark: #3b4255;
             
-            --grad-wood: linear-gradient(160deg, #8d6e63 0%, #5d4037 100%);
-            --grad-blue: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
-            --grad-teal: linear-gradient(135deg, #22a6b3 0%, #7ed6df 100%);
-            --grad-orange: linear-gradient(135deg, #f0932b 0%, #ffbe76 100%);
-            --grad-purple: linear-gradient(135deg, #be2edd 0%, #e056fd 100%);
-            --grad-yellow: linear-gradient(135deg, #f9ca24 0%, #f6e58d 100%);
-            --grad-red: linear-gradient(135deg, #eb4d4b 0%, #ff7979 100%);
+            /* Elements */
+            --pyro-red: #ec4923;
+            --pyro-bg: linear-gradient(135deg, #702517 0%, #361515 100%);
             
-            --c-blue: #4834d4; --c-teal: #22a6b3; --c-orange: #f0932b;
-            --c-purple: #be2edd; --c-red: #eb4d4b; --c-green: #6ab04c;
-
-            --texture-pencil: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.02) 5px, rgba(0,0,0,0.02) 6px);
-            --wash-blue: linear-gradient(to bottom right, rgba(72, 52, 212, 0.05), rgba(72, 52, 212, 0.15));
-            --wash-teal: linear-gradient(to bottom right, rgba(34, 166, 179, 0.05), rgba(34, 166, 179, 0.15));
-            --wash-orange: linear-gradient(to bottom right, rgba(240, 147, 43, 0.05), rgba(240, 147, 43, 0.15));
-
-            --border-thick: 3px solid var(--ink-color);
-            --sketch-shadow: 4px 4px 0px rgba(44, 62, 80, 0.15);
+            --electro-purp: #a757cb;
+            --electro-bg: linear-gradient(135deg, #442657 0%, #221733 100%);
+            
+            --anemo-teal: #74c2a8;
+            --anemo-bg: linear-gradient(135deg, #235446 0%, #112924 100%);
+            
+            /* Rarity */
+            --star-5: #ffcc32;
+            --star-4: #a06cd5;
+            
+            /* Text */
+            --text-main: #4a5061;
+            --text-light: #f0f0f0;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Patrick Hand', cursive;
-            background-color: var(--paper-bg);
-            background-image: radial-gradient(#dcdde1 1px, transparent 1px), var(--texture-pencil);
-            background-size: 20px 20px, 100% 100%;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-void);
+            /* Efek Langit Wish */
+            background-image: 
+                radial-gradient(circle at 50% 10%, #394363 0%, transparent 40%),
+                radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1px),
+                radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 100px 100px;
+            background-position: 0 0, 0 0, 25px 25px;
+            
             min-height: 100vh; margin: 0; padding: 15px;
-            color: var(--ink-color);
+            color: var(--text-light);
             overflow-x: hidden;
         }
 
-        /* --- SCROLLBAR --- */
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-left: 1px dashed rgba(0,0,0,0.1); }
-        ::-webkit-scrollbar-thumb { 
-            background: var(--c-purple); 
-            border: 2px solid var(--paper-bg); 
-            border-radius: 10px; 
-        }
-        ::-webkit-scrollbar-thumb:hover { background: var(--c-blue); }
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        ::-webkit-scrollbar-thumb { background: var(--ui-panel); border-radius: 4px; border: 2px solid var(--bg-void); }
 
         .container { width: 100%; max-width: 1200px; margin: 0 auto; }
 
-        /* --- HEADER --- */
-        .header-section { display: flex; align-items: flex-end; justify-content: flex-start; margin-bottom: 20px; gap: 20px; flex-wrap: wrap; padding-left: 10px; }
+        /* --- HEADER AREA --- */
+        .header-section { display: flex; align-items: flex-end; justify-content: flex-start; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; padding-left: 10px; }
 
         .teacher-desk {
-            width: 160px; height: 90px;
-            background: var(--grad-wood); color: #fff;
-            display: flex; justify-content: center; align-items: center;
-            text-align: center; font-size: 22px; font-weight: bold;
-            border: 3px solid #3e2723; border-radius: 8px 20px 10px 15px; 
-            box-shadow: 5px 5px 0px rgba(62, 39, 35, 0.4); 
-            transform: rotate(-1deg); text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
-            flex-shrink: 0; z-index: 5; order: 1;
+            width: 200px; height: 90px;
+            background: linear-gradient(to bottom, #dcdfe6, #cfd3dc);
+            color: var(--ui-dark);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; 
+            border: 2px solid #fff; 
+            border-radius: 4px 4px 15px 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
+            flex-shrink: 0; z-index: 5; order: 1; position: relative;
+            
+            /* Typography GUILD MASTER */
+            font-family: 'Cinzel', serif; 
+            font-weight: 700; 
+            font-size: 20px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+        
+        /* Hiasan kecil di atas meja */
+        .teacher-desk::before { 
+            content: "✦ ADVENTURERS ✦"; 
+            font-size: 9px; 
+            opacity: 0.6; 
+            letter-spacing: 2px; 
+            margin-bottom: 2px;
+            font-family: 'Quicksand', sans-serif;
         }
 
-        .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding-bottom: 5px; order: 2; }
+        .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding-bottom: 5px; order: 2; }
 
-        /* --- BUTTONS --- */
-        .btn-sketch {
-             border: var(--border-thick);
-             border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-             box-shadow: var(--sketch-shadow);
-             transition: all 0.1s; background: #fff;
-             padding: 10px 20px; font-size: 16px; font-weight: bold; cursor: pointer; font-family: inherit;
+        /* --- GENSHIN BUTTONS --- */
+        .btn-tevyat {
+             background: #ece5d8;
+             color: #3b425d;
+             border: none; border-radius: 50px;
+             padding: 10px 24px; 
+             font-size: 15px; font-weight: bold; cursor: pointer; font-family: inherit;
              position: relative; overflow: hidden; user-select: none;
+             box-shadow: 0 4px 0 #b4a898, 0 5px 10px rgba(0,0,0,0.3);
+             transition: all 0.1s;
+             display: flex; align-items: center; gap: 8px;
         }
-        .btn-sketch:active { transform: scale(0.95); box-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
-        .btn-orange { color: var(--c-orange); } .btn-orange:hover { background: var(--grad-orange); color: white; border-color: #d35400; }
-        .btn-purple { color: var(--c-purple); } .btn-purple:hover { background: var(--grad-purple); color: white; border-color: #8e44ad; }
-        .btn-blue { color: var(--c-blue); } .btn-blue:hover { background: var(--grad-blue); color: white; border-color: #192a56; }
+        .btn-tevyat:active { transform: translateY(4px); box-shadow: 0 0 0 #b4a898; }
+        
+        /* Tombol Wish (Kuning) */
+        .btn-wish { 
+            background: linear-gradient(to right, #e8cc8d, #d8b66e); 
+            color: #594524; 
+            box-shadow: 0 4px 0 #a08348, 0 5px 15px rgba(255, 204, 50, 0.2); 
+        }
+        .btn-wish:active { box-shadow: 0 0 0 #a08348; }
 
+        /* Icon Primogem CSS only */
+        .primo-icon {
+            width: 16px; height: 16px;
+            background: linear-gradient(135deg, #a797ff, #6f80ff);
+            clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 18% 100%, 0% 35%);
+            display: inline-block;
+        }
+
+        /* --- DROPDOWN --- */
         .dropdown { position: relative; }
         .dropdown-content { 
-            display: none; position: absolute; top: 115%; left: 0; 
-            background: #fff; z-index: 50; min-width: 180px; padding: 5px; 
-            border: var(--border-thick); border-radius: 10px; box-shadow: var(--sketch-shadow);
+            display: none; position: absolute; top: 125%; left: 0; 
+            background: rgba(40, 44, 58, 0.95); 
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 8px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            min-width: 220px; z-index: 50;
+            backdrop-filter: blur(10px);
         }
         .dropdown-content button { 
-            width: 100%; text-align: left; border: none; border-bottom: 2px dashed #eee; 
-            padding: 10px; background: transparent; font-weight: bold; cursor: pointer; 
-            font-family: inherit; font-size: 16px; color: var(--ink-color);
+            width: 100%; text-align: left; border: none; border-radius: 6px;
+            padding: 12px; background: transparent; font-weight: bold; cursor: pointer; 
+            font-family: inherit; font-size: 14px; color: #ece5d8;
+            transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .dropdown-content button:hover { background: var(--grad-blue); color: white; }
+        .dropdown-content button:hover { background: rgba(255,255,255,0.1); padding-left: 18px; color: var(--star-5); }
+        .dropdown-content button:last-child { border-bottom: none; }
         .show { display: block; }
 
-        /* --- GRID --- */
+        /* --- CLASSROOM GRID --- */
         .classroom-grid { display: grid; grid-template-columns: repeat(6, 1fr) 80px; gap: 15px; padding: 10px; align-items: center; }
 
+        /* --- CHARACTER CARDS --- */
         .seat {
-            aspect-ratio: 4/3; position: relative; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; padding: 10px;
-            border: var(--border-thick); border-radius: 10px 20px 15px 10px;
-            box-shadow: var(--sketch-shadow); transition: all 0.2s; background: #fff; min-height: 85px;
+            aspect-ratio: 4/5; /* Rasio Portrait ala Kartu Karakter */
+            position: relative; display: flex; flex-direction: column;
+            justify-content: flex-end; align-items: center; padding: 10px;
+            border-radius: 8px; 
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4); 
+            transition: all 0.3s ease;
+            min-height: 100px;
+            border: 2px solid rgba(255,255,255,0.1);
         }
-        .seat-row-0 { background-image: var(--wash-blue), var(--texture-pencil); }
-        .seat-row-1 { background-image: var(--wash-teal), var(--texture-pencil); }
-        .seat-row-2 { background-image: var(--wash-orange), var(--texture-pencil); }
 
+        /* ELEMENTAL THEMES PER ROW */
+        .seat-row-0 { background: var(--pyro-bg); border-bottom: 4px solid var(--pyro-red); }
+        .seat-row-1 { background: var(--electro-bg); border-bottom: 4px solid var(--electro-purp); }
+        .seat-row-2 { background: var(--anemo-bg); border-bottom: 4px solid var(--anemo-teal); }
+
+        /* Hover Glow */
+        .seat:hover { transform: translateY(-5px) scale(1.02); z-index: 2; }
+        .seat-row-0:hover { box-shadow: 0 0 20px rgba(236, 73, 35, 0.4); border-color: var(--pyro-red); }
+        .seat-row-1:hover { box-shadow: 0 0 20px rgba(167, 87, 203, 0.4); border-color: var(--electro-purp); }
+        .seat-row-2:hover { box-shadow: 0 0 20px rgba(116, 194, 168, 0.4); border-color: var(--anemo-teal); }
+
+        /* Vision Icon Overlay */
+        .vision-icon {
+            position: absolute; top: 5px; left: 5px; width: 24px; height: 24px;
+            opacity: 0.3; background-size: contain; background-repeat: no-repeat;
+        }
+
+        /* LOCKED STATE */
         .seat.is-locked {
-            background: var(--grad-yellow) !important; border-color: #f39c12 !important;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05), var(--sketch-shadow) !important;
-            transform: none !important; color: #d35400 !important;
+            filter: grayscale(0.8);
+            border: 2px solid var(--star-5) !important;
         }
-
+        .seat.is-locked::after {
+            content: "LOCKED"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
+            color: var(--star-5); font-weight: bold; font-family: 'Cinzel', serif; border: 2px solid var(--star-5); padding: 5px;
+            font-size: 12px; letter-spacing: 2px;
+        }
+        
         .lock-box {
-            position: absolute; top: -8px; right: -8px; width: 30px; height: 30px;
-            border: var(--border-thick); border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 14px; background: #fff; box-shadow: 2px 2px 0px rgba(0,0,0,0.1); z-index: 2;
+            position: absolute; top: 5px; right: 5px; width: 28px; height: 28px;
+            background: rgba(0,0,0,0.5); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 3; transition: 0.2s; border: 1px solid rgba(255,255,255,0.3);
         }
+        .lock-box:hover { background: #fff; color: #000; }
 
-        .seat-number { position: absolute; bottom: 5px; left: 8px; font-weight: bold; font-size: 12px; color: rgba(44, 62, 80, 0.4); }
-        .seat-name { font-weight: bold; text-align: center; width: 100%; line-height: 1.1; text-transform: uppercase; word-break: break-word;}
-        .text-normal { font-size: 18px; } .text-medium { font-size: 15px; } .text-small { font-size: 12px; } .text-tiny { font-size: 10px; }
+        /* TEXT STYLING */
+        .seat-number { 
+            position: absolute; top: 5px; right: 40px; 
+            font-size: 10px; color: rgba(255, 255, 255, 0.5); font-family: 'Cinzel', serif;
+        }
+        .seat-name { 
+            font-weight: 700; text-align: center; width: 100%; line-height: 1.2; 
+            text-transform: uppercase; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 5px;
+        }
+        .text-normal { font-size: 14px; } .text-medium { font-size: 12px; } .text-small { font-size: 10px; } .text-tiny { font-size: 9px; }
 
-        .row-label { font-size: 20px; font-weight: bold; transform: rotate(2deg); text-align: center; }
-        .label-r0 { color: var(--c-blue); } .label-r1 { color: var(--c-teal); } .label-r2 { color: var(--c-orange); }
+        /* STARS RATING */
+        .stars { color: var(--star-5); font-size: 10px; margin-top: -2px; letter-spacing: 1px;}
 
-        /* --- MODAL --- */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.6); backdrop-filter: blur(4px); }
+        /* ROW LABEL */
+        .row-label { 
+            font-family: 'Cinzel', serif; font-size: 16px; font-weight: bold; 
+            text-align: center; writing-mode: vertical-rl; text-orientation: mixed;
+            text-shadow: 0 0 10px currentColor; letter-spacing: 3px;
+        }
+        .label-r0 { color: var(--pyro-red); }
+        .label-r1 { color: var(--electro-purp); }
+        .label-r2 { color: var(--anemo-teal); }
+
+        /* --- MODAL (ARCHIVE MENU) --- */
+        .modal { 
+            display: none; position: fixed; z-index: 100; left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.7); 
+            backdrop-filter: blur(5px); 
+        }
         
         .modal-content { 
-            background: var(--paper-bg); 
-            margin: 5% auto; padding: 20px; width: 90%; max-width: 500px; 
-            border-radius: 10px; border: var(--border-thick); 
+            background: var(--ui-panel); /* Warna Menu Genshin */
+            color: var(--text-main);
+            margin: 5% auto; padding: 25px; width: 90%; max-width: 550px; 
+            border-radius: 4px; /* Sudut sedikit tumpul */
             height: 85vh; max-height: 85vh; display: flex; flex-direction: column; 
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.1), 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
         }
         
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; }
+        .modal-title { margin: 0; font-family: 'Cinzel', serif; color: var(--ui-dark); font-size: 24px; }
+        
         .close-btn {
-            font-size: 28px; cursor: pointer; font-weight: bold; color: var(--c-red); 
-            display: inline-block; transition: transform 0.2s ease;
+            width: 30px; height: 30px; background: #ccc; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; cursor: pointer; color: #555; transition: 0.2s;
         }
-        .close-btn:hover { transform: rotate(90deg) scale(1.2); }
+        .close-btn:hover { background: #3b425d; color: #fff; }
 
-        /* Input Standard */
         .manager-input { 
-            width: 100%; padding: 10px; border: var(--border-thick); 
-            border-radius: 5px; font-family: inherit; font-weight: bold; 
-            margin-bottom: 10px; flex-shrink: 0;
+            width: 100%; padding: 12px; border: none; background: #fff;
+            border-radius: 20px; font-family: inherit; font-weight: bold; color: var(--ui-dark);
+            margin-bottom: 10px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         }
+        .manager-input:focus { outline: none; box-shadow: 0 0 0 2px var(--star-5); }
         
         .name-list { 
             flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
-            border: var(--border-thick); padding: 5px; border-radius: 5px; background: #fff; margin: 10px 0;
-            scrollbar-color: var(--c-purple) rgba(0,0,0,0.05); scrollbar-width: thin;
+            background: rgba(255,255,255,0.5); padding: 5px; border-radius: 8px; margin: 10px 0;
         }
         
-        #bulkEditArea { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+        .name-item { 
+            padding: 12px; margin-bottom: 6px; border-radius: 6px; background: #fff;
+            display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.1s;
+        }
+        .name-item:hover { transform: translateX(5px); border-left: 4px solid var(--star-5); }
         
-        .name-item { padding: 8px; border-bottom: 2px dashed #eee; display: flex; justify-content: space-between; align-items: center; }
-        .name-item.eliminated span { text-decoration: line-through; color: var(--c-red); opacity: 0.5; }
-        .action-btn { padding: 4px 8px; cursor: pointer; background: #fff; border: 2px solid #2c3e50; border-radius: 5px; font-family: inherit; font-weight: bold; margin-left: 5px; }
-        .modal-footer { flex-shrink: 0; }
+        .name-item.eliminated span { opacity: 0.4; text-decoration: line-through; }
+        
+        .action-btn { 
+            width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; margin-left: 5px;
+            font-size: 12px; transition: 0.2s;
+        }
+        .btn-edit { background: #d4e4ff; color: #2980b9; }
+        .btn-del { background: #fadbd8; color: #c0392b; }
+        .btn-status { background: #abebc6; color: #27ae60; width: auto; padding: 0 10px; border-radius: 12px; }
+
+        #bulkEditArea { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 10px; border-radius: 8px; border: none; font-family: monospace; }
 
         /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
-            .header-section { flex-direction: column; align-items: center; padding-left: 0; }
-            .controls { order: 1; width: 100%; justify-content: center; display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 15px; }
-            .teacher-desk { order: 2; width: 100%; max-width: 250px; transform: rotate(0deg); margin-right: 0; margin-bottom: 10px; }
-            .dropdown { grid-column: span 2; } .dropdown button { width: 100%; }
-            .dropdown-content { left: 50%; transform: translateX(-50%); width: 95%; }
+            .header-section { flex-direction: column; align-items: center; padding-left: 0; gap: 10px;}
+            .controls { order: 1; width: 100%; justify-content: center; display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 20px; }
+            .teacher-desk { order: 2; width: 100%; max-width: 280px; transform: rotate(0deg); margin-right: 0; margin-bottom: 15px; border-radius: 10px;}
+            
+            .dropdown { grid-column: span 2; } .dropdown button { width: 100%; justify-content: center; }
+            .dropdown-content { left: 50%; transform: translateX(-50%); width: 95%; top: 110%; }
+            
             .classroom-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 5px; }
-            .row-label { grid-column: 1 / -1; margin-top: 20px; margin-bottom: 5px; border-bottom: 2px dashed rgba(44, 62, 80, 0.2); padding-bottom: 5px; transform: rotate(0deg); }
-            .seat { min-height: 90px; }
+            
+            .row-label { 
+                grid-column: 1 / -1; margin-top: 25px; margin-bottom: 10px; 
+                writing-mode: horizontal-tb; text-orientation: mixed;
+                border-bottom: 1px solid rgba(255,255,255,0.2); 
+                padding-bottom: 5px; font-size: 14px;
+            }
+            .seat { aspect-ratio: unset; min-height: 80px; flex-direction: row; justify-content: space-between; padding: 15px; }
+            .seat-name { text-align: left; font-size: 14px; }
+            .seat-number { top: auto; bottom: 5px; right: 10px; }
+            .stars { display: none; } /* Hide stars on mobile for space */
             .modal-content { margin: 10% auto; height: 80vh; }
         }
     </style>
@@ -185,19 +308,27 @@
 
 <div class="container">
     <div class="header-section">
-        <div class="teacher-desk">MEJA<br>GURU</div>
+        <div class="teacher-desk">
+            GUILD<br>MASTER
+        </div>
         <div class="controls">
-            <button class="btn-sketch btn-orange" onclick="shuffleAll()">ACAK SEMUA!</button>
-            <button class="btn-sketch btn-purple" onclick="openManager()">✐ DATA SISWA</button>
+            <button class="btn-tevyat btn-wish" onclick="shuffleAll()">
+                <div class="primo-icon"></div> WISH x10
+            </button>
+            <button class="btn-tevyat" onclick="openManager()">
+                ⚔ PARTY SETUP
+            </button>
             <div class="dropdown">
-                <button class="btn-sketch btn-blue" onclick="toggleDropdown()" id="btnRowRandom">ACAK PER BARIS &#9662;</button>
+                <button class="btn-tevyat" onclick="toggleDropdown()" id="btnRowRandom" style="width:100%">
+                    ✦ ELEMENTAL WISH ▼
+                </button>
                 <div id="rowDropdown" class="dropdown-content">
-                    <button onclick="shuffleSpecificRows([0])">Acak Baris 1 (Biru)</button>
-                    <button onclick="shuffleSpecificRows([1])">Acak Baris 2 (Teal)</button>
-                    <button onclick="shuffleSpecificRows([2])">Acak Baris 3 (Oranye)</button>
-                    <button onclick="shuffleSpecificRows([0, 1])">Acak Baris 1 & 2</button>
-                    <button onclick="shuffleSpecificRows([1, 2])">Acak Baris 2 & 3</button>
-                    <button onclick="shuffleSpecificRows([0, 2])">Acak Baris 1 & 3</button>
+                    <button onclick="shuffleSpecificRows([0])"><span style="color:var(--pyro-red)">🔥 Pyro Banner (Baris 1)</span></button>
+                    <button onclick="shuffleSpecificRows([1])"><span style="color:var(--electro-purp)">⚡ Electro Banner (Baris 2)</span></button>
+                    <button onclick="shuffleSpecificRows([2])"><span style="color:var(--anemo-teal)">🍃 Anemo Banner (Baris 3)</span></button>
+                    <button onclick="shuffleSpecificRows([0, 1])">🔥 + ⚡ Mix</button>
+                    <button onclick="shuffleSpecificRows([1, 2])">⚡ + 🍃 Mix</button>
+                    <button onclick="shuffleSpecificRows([0, 2])">🔥 + 🍃 Mix</button>
                 </div>
             </div>
         </div>
@@ -208,39 +339,41 @@
 
 <div id="managerModal" class="modal">
     <div class="modal-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
-            <h2 style="margin:0; color:var(--c-purple);">ABSENSI KELAS</h2>
-            <span class="close-btn" onclick="goBack()">X</span>
+        <div class="modal-header">
+            <h2 class="modal-title">CHARACTER ARCHIVE</h2>
+            <div class="close-btn" onclick="goBack()">✕</div>
         </div>
         
         <div id="normalView" style="display:flex; flex-direction:column; flex:1; min-height:0;">
-            <div style="text-align:right; font-size:14px; margin:5px 0; flex-shrink:0;">Siswa: <span id="studentCount">0</span>/18</div>
+            <div style="text-align:right; font-size:12px; margin-bottom:10px; flex-shrink:0; color:#666;">
+                Total Characters: <span id="studentCount">0</span>/18
+            </div>
             
             <div style="display:flex; gap:10px; flex-shrink:0; align-items: stretch;">
-                <input type="text" id="newNameInput" class="manager-input" placeholder="Tambah nama..." style="margin:0; flex:1; width:auto;" onkeypress="handleEnter(event)">
-                <button class="btn-sketch btn-purple" style="padding:5px 15px; flex-shrink:0;" onclick="addName()">+</button>
+                <input type="text" id="newNameInput" class="manager-input" placeholder="New Character Name..." style="margin:0; flex:1; width:auto;" onkeypress="handleEnter(event)">
+                <button class="btn-tevyat btn-wish" style="padding:0 20px; border-radius:20px; flex-shrink:0;" onclick="addName()">+</button>
             </div>
             
             <div style="display:flex; gap:10px; margin-top:10px; align-items: stretch; flex-shrink:0;">
-                 <input type="text" id="searchInput" class="manager-input" placeholder="🔍 Cari siswa..." style="margin:0; font-size:14px; padding:8px; flex:1; width:auto;" onkeyup="renderNameList()">
-                 <button class="action-btn" style="color:var(--c-blue); border-color:var(--c-blue); height:auto; width:60px; flex-shrink:0;" onclick="openBulkEdit()">📝 Bulk</button>
+                 <input type="text" id="searchInput" class="manager-input" placeholder="🔍 Search..." style="margin:0; font-size:14px; padding:8px; flex:1; width:auto;" onkeyup="renderNameList()">
+                 <button class="btn-tevyat" style="height:auto; width:auto; flex-shrink:0; padding: 0 15px;" onclick="openBulkEdit()">📝 BULK</button>
             </div>
             
             <div class="name-list" id="nameListContainer"></div>
             
-            <div class="modal-footer" style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                <button class="btn-sketch" style="font-size:14px; padding:8px; color:var(--c-red);" onclick="eliminateAll()">🚫 Absen Semua</button>
-                <button class="btn-sketch" style="font-size:14px; padding:8px; color:var(--c-green);" onclick="restoreAll()">✅ Hadir Semua</button>
-                <button class="btn-sketch" style="grid-column:span 2; font-size:14px; padding:8px;" onclick="resetToDefault()">↻ Reset Default</button>
+            <div class="modal-footer" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <button class="btn-tevyat" style="font-size:12px; color:#c0392b; justify-content:center;" onclick="eliminateAll()">🚫 Expedition</button>
+                <button class="btn-tevyat" style="font-size:12px; color:#27ae60; justify-content:center;" onclick="restoreAll()">✅ Active</button>
+                <button class="btn-tevyat" style="grid-column:span 2; font-size:12px; justify-content:center;" onclick="resetToDefault()">↻ Reset Archive</button>
             </div>
         </div>
 
         <div id="bulkView" style="display:none; flex-direction:column; flex:1; min-height:0;">
-            <p style="margin:10px 0 5px 0; font-size:14px; color:#7f8c8d; flex-shrink:0;">Paste daftar nama (1 nama per baris):</p>
-            <textarea id="bulkEditArea" style="width:100%; padding:10px; border:var(--border-thick); border-radius:5px; font-family:inherit;"></textarea>
+            <p style="margin:10px 0 5px 0; font-size:12px; color:#666; flex-shrink:0;">Paste names (1 per line):</p>
+            <textarea id="bulkEditArea"></textarea>
             <div style="display:flex; gap:10px; margin-top:10px; flex-shrink:0;">
-                <button class="btn-sketch" style="flex:1; color:var(--c-red);" onclick="goBack()">Batal</button>
-                <button class="btn-sketch" style="flex:1; color:var(--c-green);" onclick="saveBulkEdit()">Simpan</button>
+                <button class="btn-tevyat" style="flex:1; color:#c0392b; justify-content:center;" onclick="goBack()">Cancel</button>
+                <button class="btn-tevyat" style="flex:1; color:#27ae60; justify-content:center;" onclick="saveBulkEdit()">Confirm</button>
             </div>
         </div>
     </div>
@@ -259,6 +392,7 @@
     let masterNames = defaultNames.map(name => ({ name: name, active: true }));
     let seats = [];
 
+    // --- NAVIGATION LOGIC ---
     function goBack() { history.back(); }
     function lockBodyScroll() { document.body.style.overflow = 'hidden'; }
     function unlockBodyScroll() { document.body.style.overflow = ''; }
@@ -276,14 +410,12 @@
             lockBodyScroll();
             renderNameList();
         }
-        
         if (state && state.view === 'bulk') {
             document.getElementById('managerModal').style.display = "block";
             document.getElementById('normalView').style.display = 'none'; 
             document.getElementById('bulkView').style.display = 'flex';
             lockBodyScroll();
         }
-
         if (state && state.view === 'dropdown') {
             document.getElementById("rowDropdown").classList.add('show');
         }
@@ -308,7 +440,7 @@
 
     function saveBulkEdit() {
         let lines = document.getElementById('bulkEditArea').value.split('\n').map(s => s.trim().toUpperCase()).filter(s => s);
-        if(lines.length > 18) { alert("Maks 18 nama!"); return; }
+        if(lines.length > 18) { alert("Max 18 Characters!"); return; }
         masterNames = lines.map(n => ({name:n, active:true}));
         goBack();
         seats.forEach(s => { s.currentName = ""; s.locked = false; }); 
@@ -318,12 +450,8 @@
 
     function toggleDropdown() { 
         const dp = document.getElementById("rowDropdown");
-        if (dp.classList.contains("show")) {
-            goBack();
-        } else {
-            history.pushState({view: 'dropdown'}, null, "");
-            dp.classList.add("show");
-        }
+        if (dp.classList.contains("show")) { goBack(); } 
+        else { history.pushState({view: 'dropdown'}, null, ""); dp.classList.add("show"); }
     }
 
     document.addEventListener('keydown', (e) => { 
@@ -331,12 +459,13 @@
     });
 
     window.onclick = function(e) {
-        if (!e.target.matches('#btnRowRandom')) {
+        if (!e.target.matches('#btnRowRandom') && !e.target.closest('#rowDropdown')) {
             if (document.getElementById("rowDropdown").classList.contains('show')) goBack();
         }
         if (e.target == document.getElementById('managerModal')) goBack();
     }
 
+    // --- GAME LOGIC ---
     function initSeats() {
         seats = [];
         for (let i = 0; i < 18; i++) seats.push({ id: i, currentName: "", locked: false });
@@ -352,9 +481,8 @@
                 const index = row * 6 + col;
                 const seatData = seats[index];
                 const seatDiv = document.createElement('div');
-                const randomRotate = seatData.locked ? 0 : (Math.random() * 2 - 1).toFixed(2);
-                seatDiv.style.transform = `rotate(${randomRotate}deg)`;
                 seatDiv.className = `seat seat-row-${row} ${seatData.locked ? 'is-locked' : ''}`;
+                
                 const lockIcon = seatData.locked ? '🔒' : '🔓';
                 let nameHTML = seatData.currentName;
                 let sizeClass = "text-normal";
@@ -362,16 +490,28 @@
                 else if (nameHTML.length > 15) sizeClass = "text-small";
                 else if (nameHTML.length > 10) sizeClass = "text-medium";
 
+                // Stars logic based on row
+                let stars = "★★★★★";
+                if(row === 1) stars = "★★★★";
+                if(row === 2) stars = "★★★";
+
                 seatDiv.innerHTML = `
                     <div class="lock-box" onclick="toggleLock(${index}, event)">${lockIcon}</div>
-                    <div class="seat-number">${col + 1}</div>
+                    <div class="vision-icon"></div>
                     <div class="seat-name ${sizeClass}">${nameHTML}</div>
+                    <div class="stars">${stars}</div>
+                    <div class="seat-number">NO. ${col + 1}</div>
                 `;
                 container.appendChild(seatDiv);
             }
             const label = document.createElement('div');
             label.className = `row-label label-r${row}`;
-            label.innerText = `BARIS ${row + 1}`;
+            
+            let rowName = "ANEMO";
+            if(row == 0) rowName = "PYRO";
+            if(row == 1) rowName = "ELECTRO";
+            
+            label.innerText = rowName;
             container.appendChild(label);
         }
     }
@@ -412,7 +552,13 @@
             if (item.name.includes(query)) {
                 const div = document.createElement('div');
                 div.className = `name-item ${!item.active ? 'eliminated' : ''}`;
-                div.innerHTML = `<span>${item.name}</span><div style="display:flex;"><button class="action-btn" style="color:blue; border-color:blue;" onclick="editName(${idx})">✎</button><button class="action-btn" style="color:red; border-color:red;" onclick="deleteName(${idx})">🗑️</button><button class="action-btn" onclick="toggleActive(${idx})">${item.active ? '✅' : '❌'}</button></div>`;
+                div.innerHTML = `
+                    <span>${item.name}</span>
+                    <div style="display:flex; align-items:center;">
+                        <button class="action-btn btn-status" onclick="toggleActive(${idx})">${item.active ? 'ON' : 'OFF'}</button>
+                        <button class="action-btn btn-edit" onclick="editName(${idx})">✎</button>
+                        <button class="action-btn btn-del" onclick="deleteName(${idx})">🗑</button>
+                    </div>`;
                 list.appendChild(div);
             }
         });
@@ -421,18 +567,18 @@
     function addName() {
         const val = document.getElementById('newNameInput').value.trim().toUpperCase();
         if (val && masterNames.length < 18) { masterNames.push({ name: val, active: true }); document.getElementById('newNameInput').value = ''; renderNameList(); } 
-        else if (masterNames.length >= 18) alert("Kelas Penuh!");
+        else if (masterNames.length >= 18) alert("Max Characters!");
     }
     function handleEnter(e) { if(e.key === 'Enter') addName(); }
-    function deleteName(idx) { if(confirm("Hapus?")) { masterNames.splice(idx, 1); renderNameList(); } }
+    function deleteName(idx) { if(confirm("Delete Character?")) { masterNames.splice(idx, 1); renderNameList(); } }
     function editName(idx) {
-        let old = masterNames[idx].name; let baru = prompt("Ganti nama:", old);
+        let old = masterNames[idx].name; let baru = prompt("New Name:", old);
         if(baru) { let upper = baru.toUpperCase(); masterNames[idx].name = upper; seats.forEach(s => { if(s.currentName === old) s.currentName = upper; }); renderNameList(); }
     }
     function toggleActive(idx) { masterNames[idx].active = !masterNames[idx].active; renderNameList(); }
-    function eliminateAll() { if(confirm("Absenkan semua?")) { masterNames.forEach(n => n.active = false); renderNameList(); }}
+    function eliminateAll() { if(confirm("Send all to expedition?")) { masterNames.forEach(n => n.active = false); renderNameList(); }}
     function restoreAll() { masterNames.forEach(n => n.active = true); renderNameList(); }
-    function resetToDefault() { if(confirm("Reset data?")) { masterNames = defaultNames.map(n => ({name:n, active:true})); renderNameList(); seats.forEach(s => { s.currentName = ""; s.locked = false; }); distributeNames(); renderSeats(); }}
+    function resetToDefault() { if(confirm("Reset Data?")) { masterNames = defaultNames.map(n => ({name:n, active:true})); renderNameList(); seats.forEach(s => { s.currentName = ""; s.locked = false; }); distributeNames(); renderSeats(); }}
 
     initSeats();
 </script>
