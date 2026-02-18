@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Denah Kelas Gacha</title>
+    <title>Denah Gacha Kelas</title>
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* --- PALET WARNA CRAYON --- */
+            /* --- PALET WARNA --- */
             --paper-bg: #fffdf0;
             --ink-color: #2c3e50;
             
-            /* Gradasi & Warna */
             --grad-wood: linear-gradient(160deg, #8d6e63 0%, #5d4037 100%);
             --grad-blue: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
             --grad-teal: linear-gradient(135deg, #22a6b3 0%, #7ed6df 100%);
@@ -23,7 +22,6 @@
             --c-blue: #4834d4; --c-teal: #22a6b3; --c-orange: #f0932b;
             --c-purple: #be2edd; --c-red: #eb4d4b; --c-green: #6ab04c;
 
-            /* Texture & Border */
             --texture-pencil: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.02) 5px, rgba(0,0,0,0.02) 6px);
             --wash-blue: linear-gradient(to bottom right, rgba(72, 52, 212, 0.05), rgba(72, 52, 212, 0.15));
             --wash-teal: linear-gradient(to bottom right, rgba(34, 166, 179, 0.05), rgba(34, 166, 179, 0.15));
@@ -47,15 +45,15 @@
 
         .container { width: 100%; max-width: 1200px; margin: 0 auto; }
 
-        /* --- HEADER & MEJA GURU --- */
+        /* --- HEADER & CONTROLS --- */
         .header-section { 
             display: flex; 
-            align-items: flex-end; /* Rata bawah */
-            justify-content: flex-start; /* FIX: Rata Kiri (Depan Bangku 1) */
+            align-items: flex-end; /* Desktop: Rata Bawah */
+            justify-content: flex-start; /* Desktop: Rata Kiri */
             margin-bottom: 20px; 
             gap: 20px; 
             flex-wrap: wrap;
-            padding-left: 10px; /* Kompensasi padding grid agar lurus */
+            padding-left: 10px; 
         }
 
         .teacher-desk {
@@ -69,13 +67,16 @@
             box-shadow: 5px 5px 0px rgba(62, 39, 35, 0.4); 
             transform: rotate(-1deg);
             text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
-            flex-shrink: 0;
-            z-index: 5;
+            flex-shrink: 0; z-index: 5;
+            order: 1; /* Default Order Desktop */
         }
 
-        .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding-bottom: 5px; }
+        .controls { 
+            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding-bottom: 5px; 
+            order: 2; /* Default Order Desktop */
+        }
 
-        /* --- BUTTON STYLES --- */
+        /* --- BUTTONS --- */
         .btn-sketch {
              border: var(--border-thick);
              border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
@@ -90,7 +91,6 @@
         .btn-purple { color: var(--c-purple); } .btn-purple:hover { background: var(--grad-purple); color: white; border-color: #8e44ad; }
         .btn-blue { color: var(--c-blue); } .btn-blue:hover { background: var(--grad-blue); color: white; border-color: #192a56; }
 
-        /* --- DROPDOWN --- */
         .dropdown { position: relative; }
         .dropdown-content { 
             display: none; position: absolute; top: 115%; left: 0; 
@@ -105,17 +105,13 @@
         .dropdown-content button:hover { background: var(--grad-blue); color: white; }
         .show { display: block; }
 
-        /* --- CLASSROOM GRID (The Magic) --- */
+        /* --- GRID KELAS --- */
         .classroom-grid { 
             display: grid; 
-            /* Desktop: 6 kursi + 1 label = 7 kolom */
             grid-template-columns: repeat(6, 1fr) 80px; 
-            gap: 15px; 
-            padding: 10px; 
-            align-items: center;
+            gap: 15px; padding: 10px; align-items: center;
         }
 
-        /* --- KURSI / SEAT --- */
         .seat {
             aspect-ratio: 4/3; position: relative; display: flex; flex-direction: column;
             justify-content: center; align-items: center; padding: 10px;
@@ -143,10 +139,8 @@
         .seat-name { font-weight: bold; text-align: center; width: 100%; line-height: 1.1; text-transform: uppercase; word-break: break-word;}
         .text-normal { font-size: 18px; } .text-medium { font-size: 15px; } .text-small { font-size: 12px; } .text-tiny { font-size: 10px; }
 
-        /* --- LABEL BARIS (Desktop) --- */
         .row-label { 
-            font-size: 20px; font-weight: bold; transform: rotate(2deg); 
-            text-align: center; 
+            font-size: 20px; font-weight: bold; transform: rotate(2deg); text-align: center; 
         }
         .label-r0 { color: var(--c-blue); } .label-r1 { color: var(--c-teal); } .label-r2 { color: var(--c-orange); }
 
@@ -159,32 +153,41 @@
         .name-item.eliminated span { text-decoration: line-through; color: var(--c-red); opacity: 0.5; }
         .action-btn { padding: 4px 8px; cursor: pointer; background: #fff; border: 2px solid #2c3e50; border-radius: 5px; font-family: inherit; font-weight: bold; margin-left: 5px; }
 
-        /* --- RESPONSIVE MOBILE (FIXED) --- */
+        /* --- MOBILE RESPONSIVE (ANDROID FIX) --- */
         @media (max-width: 768px) {
             .header-section {
-                flex-direction: column; /* Meja & Tombol Menumpuk */
-                align-items: center; /* Tengah Horizontal */
+                flex-direction: column; /* Stack Vertikal */
+                align-items: center;
                 padding-left: 0;
             }
-            .teacher-desk { width: 100%; max-width: 250px; transform: rotate(0deg); margin-bottom: 10px; }
-            .controls { justify-content: center; width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+
+            /* --- FIX POSISI: TOMBOL DI ATAS, MEJA DI BAWAH --- */
+            .controls { 
+                order: 1; /* Tombol Urutan Pertama */
+                width: 100%; 
+                justify-content: center; 
+                display: grid; 
+                grid-template-columns: 1fr 1fr; 
+                margin-bottom: 15px; /* Jarak ke Meja Guru */
+            }
+            .teacher-desk { 
+                order: 2; /* Meja Guru Urutan Kedua */
+                width: 100%; max-width: 250px; 
+                transform: rotate(0deg); 
+                margin-right: 0;
+                margin-bottom: 10px; 
+            }
+            /* ----------------------------------------------- */
+
             .dropdown { grid-column: span 2; } .dropdown button { width: 100%; }
             .dropdown-content { left: 50%; transform: translateX(-50%); width: 95%; }
 
-            /* Grid 2 Kolom */
-            .classroom-grid { 
-                grid-template-columns: repeat(2, 1fr); /* 2 Kursi per baris */
-                gap: 10px; padding: 5px; 
-            }
-            
-            /* FIX LOGIC LABEL BARIS */
+            .classroom-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 5px; }
             .row-label { 
-                grid-column: 1 / -1; /* Mengambil lebar penuh (2 kolom) */
-                margin-top: 20px; margin-bottom: 5px;
+                grid-column: 1 / -1; margin-top: 20px; margin-bottom: 5px;
                 border-bottom: 2px dashed rgba(44, 62, 80, 0.2);
                 padding-bottom: 5px; transform: rotate(0deg);
             }
-            
             .seat { min-height: 90px; }
         }
     </style>
@@ -218,24 +221,20 @@
     <div class="modal-content">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; color:var(--c-purple);">ABSENSI KELAS</h2>
-            <span style="font-size:24px; cursor:pointer; color:var(--c-red); font-weight:bold;" onclick="closeManager()">X</span>
+            <span style="font-size:24px; cursor:pointer; color:var(--c-red); font-weight:bold;" onclick="triggerBack()">X</span>
         </div>
         
         <div id="normalView" style="display:flex; flex-direction:column; flex-grow:1;">
             <div style="text-align:right; font-size:14px; margin:5px 0;">Siswa: <span id="studentCount">0</span>/18</div>
-            
             <div style="display:flex; gap:5px;">
                 <input type="text" id="newNameInput" class="manager-input" placeholder="Tambah nama..." style="margin:0;" onkeypress="handleEnter(event)">
                 <button class="btn-sketch btn-purple" style="padding:5px 15px;" onclick="addName()">+</button>
             </div>
-
             <div style="display:flex; justify-content:space-between; margin-top:10px; align-items:center;">
                  <input type="text" id="searchInput" class="manager-input" placeholder="🔍 Cari siswa..." style="margin:0; font-size:14px; padding:8px;" onkeyup="renderNameList()">
                  <button class="action-btn" style="color:var(--c-blue); border-color:var(--c-blue); margin-left:5px; height:40px;" onclick="showBulkEdit()">📝 Bulk</button>
             </div>
-
             <div class="name-list" id="nameListContainer"></div>
-
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
                 <button class="btn-sketch" style="font-size:14px; padding:8px; color:var(--c-red);" onclick="eliminateAll()">🚫 Absen Semua</button>
                 <button class="btn-sketch" style="font-size:14px; padding:8px; color:var(--c-green);" onclick="restoreAll()">✅ Hadir Semua</button>
@@ -255,7 +254,6 @@
 </div>
 
 <script>
-    // --- DATA AWAL ---
     const defaultNames = [
         "RAHMA KAMILA", "TASYA INTAN R.", "AKHSIN AMIRULLOH", 
         "ZERLINA DIAH M.", "YEHEZKIEL RAMLAN", "MAYANG MELDA D.", 
@@ -268,7 +266,6 @@
     let masterNames = defaultNames.map(name => ({ name: name, active: true }));
     let seats = [];
 
-    // --- INISIALISASI ---
     function initSeats() {
         seats = [];
         for (let i = 0; i < 18; i++) seats.push({ id: i, currentName: "", locked: false });
@@ -276,31 +273,19 @@
         renderSeats();
     }
 
-    // --- RENDER UTAMA (LOGIKA FIX MOBILE) ---
     function renderSeats() {
         const container = document.getElementById('classroom');
         container.innerHTML = '';
-        
-        // Loop per baris (row)
         for (let row = 0; row < 3; row++) {
-            
-            // 1. Render 6 Bangku
             for (let col = 0; col < 6; col++) {
                 const index = row * 6 + col;
                 const seatData = seats[index];
-                
                 const seatDiv = document.createElement('div');
-                // Rotasi acak biar natural
                 const randomRotate = seatData.locked ? 0 : (Math.random() * 2 - 1).toFixed(2);
                 seatDiv.style.transform = `rotate(${randomRotate}deg)`;
-                
                 seatDiv.className = `seat seat-row-${row} ${seatData.locked ? 'is-locked' : ''}`;
-                
-                // Isi Konten Bangku
                 const lockIcon = seatData.locked ? '🔒' : '🔓';
                 let nameHTML = seatData.currentName;
-                
-                // Auto Resize Font Nama
                 let sizeClass = "text-normal";
                 if (nameHTML.length > 20) sizeClass = "text-tiny";
                 else if (nameHTML.length > 15) sizeClass = "text-small";
@@ -313,9 +298,6 @@
                 `;
                 container.appendChild(seatDiv);
             }
-
-            // 2. Render Label Baris SETELAH 6 bangku selesai
-            // Ini kunci agar di Mobile labelnya pindah ke bawah grup
             const label = document.createElement('div');
             label.className = `row-label label-r${row}`;
             label.innerText = `BARIS ${row + 1}`;
@@ -323,83 +305,58 @@
         }
     }
 
-    // --- LOGIKA ACAK ---
     function distributeNames() {
         let lockedNames = seats.filter(s => s.locked && s.currentName).map(s => s.currentName);
-        let availableNames = masterNames
-            .filter(n => n.active)
-            .map(n => n.name)
-            .filter(name => !lockedNames.includes(name));
-        
+        let availableNames = masterNames.filter(n => n.active).map(n => n.name).filter(name => !lockedNames.includes(name));
         shuffleArray(availableNames);
-        
-        // Isi bangku yang tidak terkunci
-        seats.forEach(seat => {
-            if (!seat.locked) {
-                seat.currentName = availableNames.length > 0 ? availableNames.shift() : "";
-            }
-        });
+        seats.forEach(seat => { if (!seat.locked) seat.currentName = availableNames.length > 0 ? availableNames.shift() : ""; });
     }
 
     function shuffleAll() { distributeNames(); renderSeats(); }
     
     function shuffleSpecificRows(rowIndices) {
-        // Kumpulkan bangku target
         let targetSeats = [];
-        rowIndices.forEach(r => {
-            for(let i=0; i<6; i++) {
-                let seat = seats[r*6 + i];
-                if(!seat.locked) targetSeats.push(seat);
-            }
-        });
-
-        // Kocok nama di dalam pool target
+        rowIndices.forEach(r => { for(let i=0; i<6; i++) { let seat = seats[r*6 + i]; if(!seat.locked) targetSeats.push(seat); } });
         let names = targetSeats.map(s => s.currentName).filter(n => n !== "");
         shuffleArray(names);
-
-        // Assign balik
         targetSeats.forEach((seat, i) => seat.currentName = names[i] || "");
         renderSeats();
         document.getElementById("rowDropdown").classList.remove("show");
     }
 
     function toggleLock(index, e) {
-        e.stopPropagation();
-        if(seats[index].currentName === "") return;
-        seats[index].locked = !seats[index].locked;
-        renderSeats();
+        e.stopPropagation(); if(seats[index].currentName === "") return;
+        seats[index].locked = !seats[index].locked; renderSeats();
     }
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
+    function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
 
-    // --- UI HELPERS ---
     function toggleDropdown() { document.getElementById("rowDropdown").classList.toggle("show"); }
     
-    // Tutup dropdown/modal kalau klik di luar
     window.onclick = function(e) {
-        if (!e.target.matches('#btnRowRandom')) {
-            document.getElementById("rowDropdown").classList.remove('show');
-        }
-        if (e.target == document.getElementById('managerModal')) {
-            closeManager();
-        }
+        if (!e.target.matches('#btnRowRandom')) document.getElementById("rowDropdown").classList.remove('show');
+        if (e.target == document.getElementById('managerModal')) triggerBack();
     }
     
-    document.addEventListener('keydown', (e) => { 
-        if(e.key === "Escape") closeManager(); 
-    });
-
-    // --- MANAGER DATA SISWA ---
-    function openManager() { document.getElementById('managerModal').style.display = "block"; hideBulkEdit(); renderNameList(); }
+    // --- ANDROID BACK BUTTON LOGIC (HISTORY API) ---
     
-    function closeManager() { 
+    // 1. Fungsi Buka Modal: Push state ke history
+    function openManager() { 
+        // Push state baru supaya tombol back bisa mendeteksi perubahan
+        history.pushState({modalOpen: true}, null, "");
+        document.getElementById('managerModal').style.display = "block"; 
+        hideBulkEdit(); renderNameList(); 
+    }
+
+    // 2. Fungsi Tutup Modal via Tombol X: Panggil history.back()
+    // Ini akan memicu event 'popstate' di bawah
+    function triggerBack() {
+        history.back();
+    }
+
+    // 3. Fungsi Tutup Modal 'Asli' (Dipanggil oleh popstate)
+    function closeManagerInternal() { 
         document.getElementById('managerModal').style.display = "none";
-        // Bersihkan bangku dari nama yang dihapus/nonaktif
         seats.forEach(s => {
             const p = masterNames.find(n => n.name === s.currentName);
             if(!p || !p.active) { s.currentName = ""; s.locked = false; }
@@ -407,103 +364,65 @@
         renderSeats();
     }
 
+    // 4. Event Listener Tombol Back HP
+    window.addEventListener('popstate', function(event) {
+        const modal = document.getElementById('managerModal');
+        // Jika modal sedang terbuka, tutup!
+        if (modal.style.display === 'block') {
+            closeManagerInternal();
+        }
+    });
+
+    // Event Listener Tombol ESC (Desktop) - Optional tapi bagus ada
+    document.addEventListener('keydown', (e) => { 
+        if(e.key === "Escape") {
+             if(document.getElementById('managerModal').style.display === 'block') triggerBack();
+             document.getElementById("rowDropdown").classList.remove('show');
+        }
+    });
+
+    // --- MANAGER FUNCTIONS ---
     function renderNameList() {
         const list = document.getElementById('nameListContainer');
         const query = document.getElementById('searchInput').value.toUpperCase();
         const countSpan = document.getElementById('studentCount');
-        
         countSpan.innerText = masterNames.length;
         list.innerHTML = '';
-
         masterNames.forEach((item, idx) => {
             if (item.name.includes(query)) {
                 const div = document.createElement('div');
                 div.className = `name-item ${!item.active ? 'eliminated' : ''}`;
-                div.innerHTML = `
-                    <span>${item.name}</span>
-                    <div style="display:flex;">
-                        <button class="action-btn" style="color:blue; border-color:blue;" onclick="editName(${idx})">✎</button>
-                        <button class="action-btn" style="color:red; border-color:red;" onclick="deleteName(${idx})">🗑️</button>
-                        <button class="action-btn" onclick="toggleActive(${idx})">${item.active ? '✅' : '❌'}</button>
-                    </div>
-                `;
+                div.innerHTML = `<span>${item.name}</span><div style="display:flex;"><button class="action-btn" style="color:blue; border-color:blue;" onclick="editName(${idx})">✎</button><button class="action-btn" style="color:red; border-color:red;" onclick="deleteName(${idx})">🗑️</button><button class="action-btn" onclick="toggleActive(${idx})">${item.active ? '✅' : '❌'}</button></div>`;
                 list.appendChild(div);
             }
         });
     }
 
     function addName() {
-        const input = document.getElementById('newNameInput');
-        const val = input.value.trim().toUpperCase();
-        if (val && masterNames.length < 18) {
-            masterNames.push({ name: val, active: true });
-            input.value = '';
-            renderNameList();
-        } else if (masterNames.length >= 18) {
-            alert("Kelas Penuh (Maks 18)!");
-        }
+        const val = document.getElementById('newNameInput').value.trim().toUpperCase();
+        if (val && masterNames.length < 18) { masterNames.push({ name: val, active: true }); document.getElementById('newNameInput').value = ''; renderNameList(); } 
+        else if (masterNames.length >= 18) alert("Kelas Penuh!");
     }
-
     function handleEnter(e) { if(e.key === 'Enter') addName(); }
-
-    function deleteName(idx) {
-        if(confirm("Hapus siswa ini?")) {
-            masterNames.splice(idx, 1);
-            renderNameList();
-        }
-    }
-
+    function deleteName(idx) { if(confirm("Hapus?")) { masterNames.splice(idx, 1); renderNameList(); } }
     function editName(idx) {
-        let old = masterNames[idx].name;
-        let baru = prompt("Ganti nama:", old);
-        if(baru) {
-            let upper = baru.toUpperCase();
-            masterNames[idx].name = upper;
-            // Update nama di bangku juga kalo ada
-            seats.forEach(s => { if(s.currentName === old) s.currentName = upper; });
-            renderNameList();
-        }
+        let old = masterNames[idx].name; let baru = prompt("Ganti nama:", old);
+        if(baru) { let upper = baru.toUpperCase(); masterNames[idx].name = upper; seats.forEach(s => { if(s.currentName === old) s.currentName = upper; }); renderNameList(); }
     }
-
     function toggleActive(idx) { masterNames[idx].active = !masterNames[idx].active; renderNameList(); }
     function eliminateAll() { if(confirm("Absenkan semua?")) { masterNames.forEach(n => n.active = false); renderNameList(); }}
     function restoreAll() { masterNames.forEach(n => n.active = true); renderNameList(); }
-    function resetToDefault() { 
-        if(confirm("Reset data?")) {
-            masterNames = defaultNames.map(n => ({name:n, active:true}));
-            renderNameList();
-            seats.forEach(s => { s.currentName = ""; s.locked = false; });
-            distributeNames();
-            renderSeats();
-        }
-    }
+    function resetToDefault() { if(confirm("Reset data?")) { masterNames = defaultNames.map(n => ({name:n, active:true})); renderNameList(); seats.forEach(s => { s.currentName = ""; s.locked = false; }); distributeNames(); renderSeats(); }}
 
-    // --- BULK EDIT ---
-    function showBulkEdit() {
-        document.getElementById('normalView').style.display = 'none';
-        document.getElementById('bulkView').style.display = 'flex';
-        document.getElementById('bulkEditArea').value = masterNames.map(n => n.name).join('\n');
-    }
-    function hideBulkEdit() {
-        document.getElementById('normalView').style.display = 'flex';
-        document.getElementById('bulkView').style.display = 'none';
-    }
+    function showBulkEdit() { document.getElementById('normalView').style.display = 'none'; document.getElementById('bulkView').style.display = 'flex'; document.getElementById('bulkEditArea').value = masterNames.map(n => n.name).join('\n'); }
+    function hideBulkEdit() { document.getElementById('normalView').style.display = 'flex'; document.getElementById('bulkView').style.display = 'none'; }
     function saveBulkEdit() {
-        let raw = document.getElementById('bulkEditArea').value;
-        let lines = raw.split('\n').map(s => s.trim().toUpperCase()).filter(s => s);
-        if(lines.length > 18) { alert(`Kebanyakan! Ada ${lines.length} nama. Maks 18.`); return; }
-        
-        masterNames = lines.map(n => ({name:n, active:true}));
-        hideBulkEdit();
-        renderNameList();
-        seats.forEach(s => { s.currentName = ""; s.locked = false; });
-        distributeNames();
-        renderSeats();
+        let lines = document.getElementById('bulkEditArea').value.split('\n').map(s => s.trim().toUpperCase()).filter(s => s);
+        if(lines.length > 18) { alert("Maks 18 nama!"); return; }
+        masterNames = lines.map(n => ({name:n, active:true})); hideBulkEdit(); renderNameList(); seats.forEach(s => { s.currentName = ""; s.locked = false; }); distributeNames(); renderSeats();
     }
 
-    // Start
     initSeats();
-
 </script>
 </body>
 </html>
