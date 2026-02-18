@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Denah Kelas Gacha</title>
+    <title>Denah Kelas</title>
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -43,12 +43,17 @@
             overflow-x: hidden;
         }
 
-        /* --- SCROLLBAR CUSTOMIZATION (FIX NO 2) --- */
-        /* Biar scrollbar kelihatan di list nama dan bulk edit */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 5px; }
+        /* --- SCROLLBAR CUSTOMIZATION (FIX NO 2: LEBIH JELAS) --- */
+        /* Webkit (Chrome, Safari, Edge, Android Browser) */
+        ::-webkit-scrollbar {
+            width: 12px; /* Lebih lebar biar gampang disentuh */
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05); 
+            border-left: 1px dashed rgba(0,0,0,0.1);
+        }
         ::-webkit-scrollbar-thumb { 
-            background: var(--c-purple); 
+            background: var(--c-purple); /* Warna Ungu Crayon */
             border: 2px solid var(--paper-bg); 
             border-radius: 10px; 
         }
@@ -140,12 +145,21 @@
         /* --- MODAL --- */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.6); backdrop-filter: blur(4px); }
         .modal-content { background: var(--paper-bg); margin: 5% auto; padding: 20px; width: 90%; max-width: 500px; border-radius: 10px; border: var(--border-thick); height: 85vh; display: flex; flex-direction: column; }
+        
+        /* FIX NO 3: Animasi Tombol Close */
+        .close-btn {
+            font-size: 28px; cursor: pointer; font-weight: bold; color: var(--c-red); 
+            display: inline-block; transition: transform 0.2s ease;
+        }
+        .close-btn:hover {
+            transform: rotate(90deg) scale(1.2); /* Animasi Putar & Besar */
+        }
+
         .manager-input { width: 100%; padding: 10px; border: var(--border-thick); border-radius: 5px; font-family: inherit; font-weight: bold; margin-bottom: 10px; }
         
-        /* FIX NO 2: Scrollbar container */
         .name-list { 
             flex-grow: 1; 
-            overflow-y: auto; /* Wajib auto biar scroll muncul */
+            overflow-y: auto; 
             border: var(--border-thick); padding: 5px; border-radius: 5px; background: #fff; margin: 10px 0;
             scrollbar-color: var(--c-purple) rgba(0,0,0,0.05); /* Firefox support */
             scrollbar-width: thin;
@@ -197,7 +211,7 @@
     <div class="modal-content">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; color:var(--c-purple);">ABSENSI KELAS</h2>
-            <span style="font-size:24px; cursor:pointer; color:var(--c-red); font-weight:bold;" onclick="goBack()">X</span>
+            <span class="close-btn" onclick="goBack()">X</span>
         </div>
         
         <div id="normalView" style="display:flex; flex-direction:column; flex-grow:1;">
@@ -242,128 +256,95 @@
     let masterNames = defaultNames.map(name => ({ name: name, active: true }));
     let seats = [];
 
-    // --- LOGIKA HISTORY API & NAVIGASI (FIX NO 1 & 3) ---
-    
-    // Fungsi pembantu untuk tombol fisik/UI yang sifatnya "Mundur"
     function goBack() {
         history.back();
     }
 
-    // LISTENER UTAMA: Mendeteksi saat tombol Back Android ditekan
     window.onpopstate = function(event) {
-        // Kita cek state mana yang aktif
         const state = event.state;
         
-        // Reset UI dulu ke keadaan bersih (Tutup semua popup)
+        // Reset UI
         document.getElementById('managerModal').style.display = "none";
         document.getElementById('bulkView').style.display = "none";
         document.getElementById('normalView').style.display = "flex";
         document.getElementById("rowDropdown").classList.remove('show');
 
-        // Kalau state null (Halaman Utama), ya sudah selesai (semua tertutup).
-        
-        // Kalau state 'modal', buka Modal (Normal View)
+        // Restore View based on state
         if (state && state.view === 'modal') {
             document.getElementById('managerModal').style.display = "block";
             renderNameList();
         }
         
-        // Kalau state 'bulk', buka Modal + Bulk View
-        // (Ini jarang terjadi saat Back, biasanya saat Forward, tapi jaga-jaga)
         if (state && state.view === 'bulk') {
             document.getElementById('managerModal').style.display = "block";
             document.getElementById('normalView').style.display = 'none'; 
             document.getElementById('bulkView').style.display = 'flex';
         }
 
-        // Kalau state 'dropdown', buka Dropdown
         if (state && state.view === 'dropdown') {
             document.getElementById("rowDropdown").classList.add('show');
         }
     };
 
-    // Fungsi Buka Manager
     function openManager() { 
-        // Push state: Kita masuk ke layer 'modal'
+        // FIX NO 1: Tutup dropdown secara visual jika sedang terbuka
+        // Supaya tidak menutupi modal/tombol
+        document.getElementById("rowDropdown").classList.remove('show');
+
         history.pushState({view: 'modal'}, null, "");
         
         document.getElementById('managerModal').style.display = "block"; 
-        // Reset view modal ke normal setiap kali buka baru
         document.getElementById('normalView').style.display = 'flex'; 
         document.getElementById('bulkView').style.display = 'none';
         renderNameList(); 
     }
 
-    // Fungsi Buka Bulk Edit
     function openBulkEdit() {
-        // Push state: Kita masuk ke layer 'bulk' di atas 'modal'
         history.pushState({view: 'bulk'}, null, "");
-
         document.getElementById('normalView').style.display = 'none'; 
         document.getElementById('bulkView').style.display = 'flex'; 
         document.getElementById('bulkEditArea').value = masterNames.map(n => n.name).join('\n'); 
     }
 
-    // Fungsi Simpan Bulk
     function saveBulkEdit() {
         let lines = document.getElementById('bulkEditArea').value.split('\n').map(s => s.trim().toUpperCase()).filter(s => s);
         if(lines.length > 18) { alert("Maks 18 nama!"); return; }
-        
         masterNames = lines.map(n => ({name:n, active:true}));
-        
-        // Setelah simpan, kita anggap selesai urusan Bulk, jadi panggil goBack()
-        // Ini akan trigger onpopstate, yang otomatis akan melihat state sebelumnya adalah 'modal'
-        // Jadi dia akan nutup bulk dan nampilin modal normal. Ajaib kan?
         goBack();
-        
-        // Update data di background (popstate akan handle render UI nya)
         seats.forEach(s => { s.currentName = ""; s.locked = false; }); 
         distributeNames(); 
         renderSeats();
     }
 
-    // Fungsi Toggle Dropdown
     function toggleDropdown() { 
         const dp = document.getElementById("rowDropdown");
         if (dp.classList.contains("show")) {
-            // Kalau lagi buka terus diklik tombolnya, berarti mau tutup -> Mundur history
             goBack();
         } else {
-            // Kalau mau buka -> Push state 'dropdown'
             history.pushState({view: 'dropdown'}, null, "");
             dp.classList.add("show");
         }
     }
 
-    // Handle tombol ESC di desktop
     document.addEventListener('keydown', (e) => { 
         if(e.key === "Escape") {
-            // Cek apakah ada history state yang aktif? Kalau ada, mundur.
-            if (history.state) {
-                goBack();
-            }
+            if (history.state) goBack();
         }
     });
 
-    // Klik di luar dropdown/modal untuk menutup
     window.onclick = function(e) {
-        // Khusus Dropdown
         if (!e.target.matches('#btnRowRandom')) {
-            // Cek apakah dropdown lagi nampil?
             if (document.getElementById("rowDropdown").classList.contains('show')) {
-                // Kalau nampil dan klik di luar -> Back
                 goBack();
             }
         }
         
-        // Khusus Modal (klik area gelap)
         if (e.target == document.getElementById('managerModal')) {
-            // Kalau modal lagi nampil dan klik luar -> Back
              goBack();
         }
     }
 
-    // --- LOGIKA UTAMA (TIDAK BERUBAH BANYAK) ---
+    // --- LOGIKA UTAMA ---
 
     function initSeats() {
         seats = [];
@@ -420,8 +401,6 @@
         shuffleArray(names);
         targetSeats.forEach((seat, i) => seat.currentName = names[i] || "");
         renderSeats();
-        
-        // Tutup dropdown setelah pilih (pakai goBack karena dropdown open = history state)
         goBack();
     }
 
