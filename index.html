@@ -3,32 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gacha Bangku: Guild Edition</title>
+    <title>Gacha Bangku: Party Setup</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             /* --- TEYVAT PALETTE --- */
             --bg-void: #181b2a;
-            --bg-star: #252a40;
             --ui-panel: #e3e5e8;
             --ui-dark: #3b4255;
             
-            /* Elements */
+            /* Elements Colors */
             --pyro-red: #ec4923;
             --pyro-bg: linear-gradient(135deg, #702517 0%, #361515 100%);
-            
             --electro-purp: #a757cb;
             --electro-bg: linear-gradient(135deg, #442657 0%, #221733 100%);
-            
             --anemo-teal: #74c2a8;
             --anemo-bg: linear-gradient(135deg, #235446 0%, #112924 100%);
             
             /* Rarity */
             --star-5: #ffcc32;
-            --star-4: #a06cd5;
-            
-            /* Text */
-            --text-main: #4a5061;
             --text-light: #f0f0f0;
         }
 
@@ -37,14 +30,10 @@
         body {
             font-family: 'Quicksand', sans-serif;
             background-color: var(--bg-void);
-            /* Efek Langit Wish */
             background-image: 
                 radial-gradient(circle at 50% 10%, #394363 0%, transparent 40%),
-                radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1px),
                 radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 1px);
-            background-size: 100% 100%, 50px 50px, 100px 100px;
-            background-position: 0 0, 0 0, 25px 25px;
-            
+            background-size: 100% 100%, 50px 50px;
             min-height: 100vh; margin: 0; padding: 15px;
             color: var(--text-light);
             overflow-x: hidden;
@@ -57,7 +46,7 @@
 
         .container { width: 100%; max-width: 1200px; margin: 0 auto; }
 
-        /* --- HEADER AREA --- */
+        /* --- HEADER --- */
         .header-section { display: flex; align-items: flex-end; justify-content: flex-start; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; padding-left: 10px; }
 
         .teacher-desk {
@@ -70,67 +59,37 @@
             border-radius: 4px 4px 15px 15px;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
             flex-shrink: 0; z-index: 5; order: 1; position: relative;
-            
-            /* Typography GUILD MASTER */
-            font-family: 'Cinzel', serif; 
-            font-weight: 700; 
-            font-size: 20px;
-            letter-spacing: 1px;
-            line-height: 1.2;
+            font-family: 'Cinzel', serif; font-weight: 700; font-size: 20px; letter-spacing: 1px;
         }
-        
-        /* Hiasan kecil di atas meja */
-        .teacher-desk::before { 
-            content: "✦ ADVENTURERS ✦"; 
-            font-size: 9px; 
-            opacity: 0.6; 
-            letter-spacing: 2px; 
-            margin-bottom: 2px;
-            font-family: 'Quicksand', sans-serif;
-        }
+        .teacher-desk::before { content: "✦ ADVENTURERS ✦"; font-size: 9px; opacity: 0.6; letter-spacing: 2px; margin-bottom: 2px; font-family: 'Quicksand', sans-serif;}
 
         .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding-bottom: 5px; order: 2; }
 
-        /* --- GENSHIN BUTTONS --- */
+        /* --- BUTTONS --- */
         .btn-tevyat {
-             background: #ece5d8;
-             color: #3b425d;
-             border: none; border-radius: 50px;
-             padding: 10px 24px; 
-             font-size: 15px; font-weight: bold; cursor: pointer; font-family: inherit;
+             background: #ece5d8; color: #3b425d; border: none; border-radius: 50px;
+             padding: 10px 24px; font-size: 15px; font-weight: bold; cursor: pointer; font-family: inherit;
              position: relative; overflow: hidden; user-select: none;
              box-shadow: 0 4px 0 #b4a898, 0 5px 10px rgba(0,0,0,0.3);
-             transition: all 0.1s;
-             display: flex; align-items: center; gap: 8px;
+             transition: all 0.1s; display: flex; align-items: center; gap: 8px;
         }
         .btn-tevyat:active { transform: translateY(4px); box-shadow: 0 0 0 #b4a898; }
         
-        /* Tombol Wish (Kuning) */
-        .btn-wish { 
-            background: linear-gradient(to right, #e8cc8d, #d8b66e); 
-            color: #594524; 
-            box-shadow: 0 4px 0 #a08348, 0 5px 15px rgba(255, 204, 50, 0.2); 
-        }
+        .btn-wish { background: linear-gradient(to right, #e8cc8d, #d8b66e); color: #594524; box-shadow: 0 4px 0 #a08348, 0 5px 15px rgba(255, 204, 50, 0.2); }
         .btn-wish:active { box-shadow: 0 0 0 #a08348; }
 
-        /* Icon Primogem CSS only */
         .primo-icon {
-            width: 16px; height: 16px;
-            background: linear-gradient(135deg, #a797ff, #6f80ff);
-            clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 18% 100%, 0% 35%);
-            display: inline-block;
+            width: 16px; height: 16px; background: linear-gradient(135deg, #a797ff, #6f80ff);
+            clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 18% 100%, 0% 35%); display: inline-block;
         }
 
         /* --- DROPDOWN --- */
         .dropdown { position: relative; }
         .dropdown-content { 
             display: none; position: absolute; top: 125%; left: 0; 
-            background: rgba(40, 44, 58, 0.95); 
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px; padding: 8px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            min-width: 220px; z-index: 50;
-            backdrop-filter: blur(10px);
+            background: rgba(40, 44, 58, 0.95); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            min-width: 220px; z-index: 50; backdrop-filter: blur(10px);
         }
         .dropdown-content button { 
             width: 100%; text-align: left; border: none; border-radius: 6px;
@@ -142,72 +101,83 @@
         .dropdown-content button:last-child { border-bottom: none; }
         .show { display: block; }
 
-        /* --- CLASSROOM GRID --- */
+        /* --- GRID --- */
         .classroom-grid { display: grid; grid-template-columns: repeat(6, 1fr) 80px; gap: 15px; padding: 10px; align-items: center; }
 
-        /* --- CHARACTER CARDS --- */
+        /* --- CHARACTER CARDS (UPDATED WITH PHOTO) --- */
         .seat {
-            aspect-ratio: 4/5; /* Rasio Portrait ala Kartu Karakter */
-            position: relative; display: flex; flex-direction: column;
-            justify-content: flex-end; align-items: center; padding: 10px;
-            border-radius: 8px; 
-            overflow: hidden;
+            aspect-ratio: 4/5; position: relative; display: flex; flex-direction: column;
+            justify-content: flex-start; /* Ubah ke flex-start biar gambar di atas */
+            align-items: center; padding: 0;
+            border-radius: 8px; overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.4); 
             transition: all 0.3s ease;
-            min-height: 100px;
+            min-height: 120px; /* Tambah tinggi dikit */
             border: 2px solid rgba(255,255,255,0.1);
+            background-color: #1e2336;
         }
 
-        /* ELEMENTAL THEMES PER ROW */
+        /* Background Element Colors */
         .seat-row-0 { background: var(--pyro-bg); border-bottom: 4px solid var(--pyro-red); }
         .seat-row-1 { background: var(--electro-bg); border-bottom: 4px solid var(--electro-purp); }
         .seat-row-2 { background: var(--anemo-bg); border-bottom: 4px solid var(--anemo-teal); }
 
-        /* Hover Glow */
         .seat:hover { transform: translateY(-5px) scale(1.02); z-index: 2; }
         .seat-row-0:hover { box-shadow: 0 0 20px rgba(236, 73, 35, 0.4); border-color: var(--pyro-red); }
         .seat-row-1:hover { box-shadow: 0 0 20px rgba(167, 87, 203, 0.4); border-color: var(--electro-purp); }
         .seat-row-2:hover { box-shadow: 0 0 20px rgba(116, 194, 168, 0.4); border-color: var(--anemo-teal); }
 
-        /* Vision Icon Overlay */
-        .vision-icon {
-            position: absolute; top: 5px; left: 5px; width: 24px; height: 24px;
-            opacity: 0.3; background-size: contain; background-repeat: no-repeat;
+        /* FOTO KARAKTER */
+        .char-img-container {
+            width: 100%; height: 70%; /* Ambil 70% tinggi kartu */
+            overflow: hidden; position: relative;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+        
+        .char-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.3s;
+        }
+        .seat:hover .char-img { transform: scale(1.1); }
+
+        /* NAMA & INFO */
+        .char-info {
+            width: 100%; height: 30%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.4); 
+            padding: 5px; position: relative;
+            backdrop-filter: blur(2px);
         }
 
-        /* LOCKED STATE */
-        .seat.is-locked {
-            filter: grayscale(0.8);
-            border: 2px solid var(--star-5) !important;
-        }
+        .seat.is-locked .char-img { filter: grayscale(1) brightness(0.5); }
+        .seat.is-locked { border: 2px solid var(--star-5) !important; }
         .seat.is-locked::after {
-            content: "LOCKED"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
-            color: var(--star-5); font-weight: bold; font-family: 'Cinzel', serif; border: 2px solid var(--star-5); padding: 5px;
-            font-size: 12px; letter-spacing: 2px;
+            content: "LOCKED"; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
+            color: var(--star-5); font-weight: bold; font-family: 'Cinzel', serif; border: 3px solid var(--star-5); padding: 5px 10px;
+            font-size: 14px; letter-spacing: 2px; z-index: 10;
         }
         
         .lock-box {
             position: absolute; top: 5px; right: 5px; width: 28px; height: 28px;
-            background: rgba(0,0,0,0.5); border-radius: 50%; 
+            background: rgba(0,0,0,0.6); border-radius: 50%; 
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 3; transition: 0.2s; border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer; z-index: 20; transition: 0.2s; border: 1px solid rgba(255,255,255,0.5);
         }
         .lock-box:hover { background: #fff; color: #000; }
 
-        /* TEXT STYLING */
-        .seat-number { 
-            position: absolute; top: 5px; right: 40px; 
-            font-size: 10px; color: rgba(255, 255, 255, 0.5); font-family: 'Cinzel', serif;
-        }
         .seat-name { 
-            font-weight: 700; text-align: center; width: 100%; line-height: 1.2; 
+            font-weight: 700; text-align: center; width: 100%; line-height: 1.1; 
             text-transform: uppercase; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-            margin-bottom: 5px;
+            margin-bottom: 2px; z-index: 2;
         }
-        .text-normal { font-size: 14px; } .text-medium { font-size: 12px; } .text-small { font-size: 10px; } .text-tiny { font-size: 9px; }
+        .text-normal { font-size: 13px; } .text-medium { font-size: 11px; } .text-small { font-size: 9px; } .text-tiny { font-size: 8px; }
 
-        /* STARS RATING */
-        .stars { color: var(--star-5); font-size: 10px; margin-top: -2px; letter-spacing: 1px;}
+        .stars { color: var(--star-5); font-size: 10px; letter-spacing: 1px; z-index: 2;}
+        .seat-number { 
+            position: absolute; bottom: 2px; right: 4px; 
+            font-size: 8px; color: rgba(255, 255, 255, 0.3); font-family: 'Cinzel', serif;
+        }
 
         /* ROW LABEL */
         .row-label { 
@@ -219,20 +189,12 @@
         .label-r1 { color: var(--electro-purp); }
         .label-r2 { color: var(--anemo-teal); }
 
-        /* --- MODAL (ARCHIVE MENU) --- */
-        .modal { 
-            display: none; position: fixed; z-index: 100; left: 0; top: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.7); 
-            backdrop-filter: blur(5px); 
-        }
-        
+        /* --- MODAL --- */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
         .modal-content { 
-            background: var(--ui-panel); /* Warna Menu Genshin */
-            color: var(--text-main);
+            background: var(--ui-panel); color: var(--text-main);
             margin: 5% auto; padding: 25px; width: 90%; max-width: 550px; 
-            border-radius: 4px; /* Sudut sedikit tumpul */
-            height: 85vh; max-height: 85vh; display: flex; flex-direction: column; 
+            border-radius: 4px; height: 85vh; max-height: 85vh; display: flex; flex-direction: column; 
             box-shadow: 0 0 0 4px rgba(255,255,255,0.1), 0 20px 50px rgba(0,0,0,0.8);
             position: relative;
         }
@@ -240,39 +202,18 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 10px; }
         .modal-title { margin: 0; font-family: 'Cinzel', serif; color: var(--ui-dark); font-size: 24px; }
         
-        .close-btn {
-            width: 30px; height: 30px; background: #ccc; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; cursor: pointer; color: #555; transition: 0.2s;
-        }
+        .close-btn { width: 30px; height: 30px; background: #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; color: #555; transition: 0.2s; }
         .close-btn:hover { background: #3b425d; color: #fff; }
 
-        .manager-input { 
-            width: 100%; padding: 12px; border: none; background: #fff;
-            border-radius: 20px; font-family: inherit; font-weight: bold; color: var(--ui-dark);
-            margin-bottom: 10px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-        }
+        .manager-input { width: 100%; padding: 12px; border: none; background: #fff; border-radius: 20px; font-family: inherit; font-weight: bold; color: var(--ui-dark); margin-bottom: 10px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
         .manager-input:focus { outline: none; box-shadow: 0 0 0 2px var(--star-5); }
         
-        .name-list { 
-            flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
-            background: rgba(255,255,255,0.5); padding: 5px; border-radius: 8px; margin: 10px 0;
-        }
-        
-        .name-item { 
-            padding: 12px; margin-bottom: 6px; border-radius: 6px; background: #fff;
-            display: flex; justify-content: space-between; align-items: center; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.1s;
-        }
+        .name-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; background: rgba(255,255,255,0.5); padding: 5px; border-radius: 8px; margin: 10px 0; }
+        .name-item { padding: 12px; margin-bottom: 6px; border-radius: 6px; background: #fff; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.1s; }
         .name-item:hover { transform: translateX(5px); border-left: 4px solid var(--star-5); }
-        
         .name-item.eliminated span { opacity: 0.4; text-decoration: line-through; }
         
-        .action-btn { 
-            width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; margin-left: 5px;
-            font-size: 12px; transition: 0.2s;
-        }
+        .action-btn { width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: 5px; font-size: 12px; transition: 0.2s; }
         .btn-edit { background: #d4e4ff; color: #2980b9; }
         .btn-del { background: #fadbd8; color: #c0392b; }
         .btn-status { background: #abebc6; color: #27ae60; width: auto; padding: 0 10px; border-radius: 12px; }
@@ -284,10 +225,8 @@
             .header-section { flex-direction: column; align-items: center; padding-left: 0; gap: 10px;}
             .controls { order: 1; width: 100%; justify-content: center; display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 20px; }
             .teacher-desk { order: 2; width: 100%; max-width: 280px; transform: rotate(0deg); margin-right: 0; margin-bottom: 15px; border-radius: 10px;}
-            
             .dropdown { grid-column: span 2; } .dropdown button { width: 100%; justify-content: center; }
             .dropdown-content { left: 50%; transform: translateX(-50%); width: 95%; top: 110%; }
-            
             .classroom-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 5px; }
             
             .row-label { 
@@ -296,10 +235,14 @@
                 border-bottom: 1px solid rgba(255,255,255,0.2); 
                 padding-bottom: 5px; font-size: 14px;
             }
-            .seat { aspect-ratio: unset; min-height: 80px; flex-direction: row; justify-content: space-between; padding: 15px; }
-            .seat-name { text-align: left; font-size: 14px; }
+            .seat { aspect-ratio: unset; min-height: 90px; flex-direction: row; justify-content: space-between; padding: 0; align-items: center; background: #23283c;}
+            /* Layout Mobile Horizontal */
+            .char-img-container { width: 60px; height: 100%; border-right: 1px solid rgba(255,255,255,0.1); }
+            .char-info { width: calc(100% - 60px); height: 100%; align-items: flex-start; padding-left: 10px; background: transparent;}
+            .seat-name { text-align: left; }
+            
             .seat-number { top: auto; bottom: 5px; right: 10px; }
-            .stars { display: none; } /* Hide stars on mobile for space */
+            .stars { display: none; } 
             .modal-content { margin: 10% auto; height: 80vh; }
         }
     </style>
@@ -485,6 +428,13 @@
                 
                 const lockIcon = seatData.locked ? '🔒' : '🔓';
                 let nameHTML = seatData.currentName;
+                
+                // GENERATE AVATAR URL
+                // Kita gunakan DiceBear Adventurer dengan seed = nama siswa
+                // Supaya gambar konsisten per nama
+                let avatarUrl = `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(nameHTML)}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+                if(!nameHTML) avatarUrl = "https://api.dicebear.com/9.x/adventurer/svg?seed=unknown&backgroundColor=transparent";
+
                 let sizeClass = "text-normal";
                 if (nameHTML.length > 20) sizeClass = "text-tiny";
                 else if (nameHTML.length > 15) sizeClass = "text-small";
@@ -497,9 +447,13 @@
 
                 seatDiv.innerHTML = `
                     <div class="lock-box" onclick="toggleLock(${index}, event)">${lockIcon}</div>
-                    <div class="vision-icon"></div>
-                    <div class="seat-name ${sizeClass}">${nameHTML}</div>
-                    <div class="stars">${stars}</div>
+                    <div class="char-img-container">
+                        <img src="${avatarUrl}" class="char-img" alt="Avatar">
+                    </div>
+                    <div class="char-info">
+                        <div class="seat-name ${sizeClass}">${nameHTML}</div>
+                        <div class="stars">${stars}</div>
+                    </div>
                     <div class="seat-number">NO. ${col + 1}</div>
                 `;
                 container.appendChild(seatDiv);
