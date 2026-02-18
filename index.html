@@ -40,20 +40,14 @@
             background-size: 20px 20px, 100% 100%;
             min-height: 100vh; margin: 0; padding: 15px;
             color: var(--ink-color);
-            overflow-x: hidden;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
-        /* --- SCROLLBAR CUSTOMIZATION (FIX NO 2: LEBIH JELAS) --- */
-        /* Webkit (Chrome, Safari, Edge, Android Browser) */
-        ::-webkit-scrollbar {
-            width: 12px; /* Lebih lebar biar gampang disentuh */
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.05); 
-            border-left: 1px dashed rgba(0,0,0,0.1);
-        }
+        /* --- SCROLLBAR STYLING --- */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-left: 1px dashed rgba(0,0,0,0.1); }
         ::-webkit-scrollbar-thumb { 
-            background: var(--c-purple); /* Warna Ungu Crayon */
+            background: var(--c-purple); 
             border: 2px solid var(--paper-bg); 
             border-radius: 10px; 
         }
@@ -62,10 +56,7 @@
         .container { width: 100%; max-width: 1200px; margin: 0 auto; }
 
         /* --- HEADER --- */
-        .header-section { 
-            display: flex; align-items: flex-end; justify-content: flex-start; 
-            margin-bottom: 20px; gap: 20px; flex-wrap: wrap; padding-left: 10px; 
-        }
+        .header-section { display: flex; align-items: flex-end; justify-content: flex-start; margin-bottom: 20px; gap: 20px; flex-wrap: wrap; padding-left: 10px; }
 
         .teacher-desk {
             width: 160px; height: 90px;
@@ -90,7 +81,6 @@
              position: relative; overflow: hidden; user-select: none;
         }
         .btn-sketch:active { transform: scale(0.95); box-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
-
         .btn-orange { color: var(--c-orange); } .btn-orange:hover { background: var(--grad-orange); color: white; border-color: #d35400; }
         .btn-purple { color: var(--c-purple); } .btn-purple:hover { background: var(--grad-purple); color: white; border-color: #8e44ad; }
         .btn-blue { color: var(--c-blue); } .btn-blue:hover { background: var(--grad-blue); color: white; border-color: #192a56; }
@@ -116,8 +106,7 @@
             aspect-ratio: 4/3; position: relative; display: flex; flex-direction: column;
             justify-content: center; align-items: center; padding: 10px;
             border: var(--border-thick); border-radius: 10px 20px 15px 10px;
-            box-shadow: var(--sketch-shadow); transition: all 0.2s; background: #fff;
-            min-height: 85px;
+            box-shadow: var(--sketch-shadow); transition: all 0.2s; background: #fff; min-height: 85px;
         }
         .seat-row-0 { background-image: var(--wash-blue), var(--texture-pencil); }
         .seat-row-1 { background-image: var(--wash-teal), var(--texture-pencil); }
@@ -142,32 +131,60 @@
         .row-label { font-size: 20px; font-weight: bold; transform: rotate(2deg); text-align: center; }
         .label-r0 { color: var(--c-blue); } .label-r1 { color: var(--c-teal); } .label-r2 { color: var(--c-orange); }
 
-        /* --- MODAL --- */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.6); backdrop-filter: blur(4px); }
-        .modal-content { background: var(--paper-bg); margin: 5% auto; padding: 20px; width: 90%; max-width: 500px; border-radius: 10px; border: var(--border-thick); height: 85vh; display: flex; flex-direction: column; }
+        /* --- MODAL (SCROLL FIX HERE) --- */
+        .modal { 
+            display: none; position: fixed; z-index: 100; left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(44, 62, 80, 0.6); 
+            backdrop-filter: blur(4px); 
+            /* Hapus overflow-y di sini agar event scroll fokus ke anak */
+        }
         
-        /* FIX NO 3: Animasi Tombol Close */
+        .modal-content { 
+            background: var(--paper-bg); 
+            margin: 5% auto; padding: 20px; width: 90%; max-width: 500px; 
+            border-radius: 10px; border: var(--border-thick); 
+            
+            /* KUNCI 1: Tetapkan tinggi pasti, jangan cuma auto */
+            height: 85vh; 
+            max-height: 85vh; 
+            
+            display: flex; flex-direction: column; 
+        }
+        
         .close-btn {
             font-size: 28px; cursor: pointer; font-weight: bold; color: var(--c-red); 
             display: inline-block; transition: transform 0.2s ease;
         }
-        .close-btn:hover {
-            transform: rotate(90deg) scale(1.2); /* Animasi Putar & Besar */
-        }
+        .close-btn:hover { transform: rotate(90deg) scale(1.2); }
 
-        .manager-input { width: 100%; padding: 10px; border: var(--border-thick); border-radius: 5px; font-family: inherit; font-weight: bold; margin-bottom: 10px; }
+        .manager-input { width: 100%; padding: 10px; border: var(--border-thick); border-radius: 5px; font-family: inherit; font-weight: bold; margin-bottom: 10px; flex-shrink: 0; }
         
+        /* KUNCI 2: Perbaiki Flex Child untuk Scroll */
         .name-list { 
-            flex-grow: 1; 
-            overflow-y: auto; 
+            flex: 1 1 auto; /* Flex grow, shrink, auto basis */
+            min-height: 0; /* WAJIB ADA: Biar flex container tidak jebol ke bawah */
+            overflow-y: auto; /* Scroll hanya di area ini */
+            -webkit-overflow-scrolling: touch; /* Biar smooth di iPhone/Android */
+            
             border: var(--border-thick); padding: 5px; border-radius: 5px; background: #fff; margin: 10px 0;
-            scrollbar-color: var(--c-purple) rgba(0,0,0,0.05); /* Firefox support */
+            scrollbar-color: var(--c-purple) rgba(0,0,0,0.05); 
             scrollbar-width: thin;
+        }
+        
+        /* Bulk area juga harus bisa discroll */
+        #bulkEditArea {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
         }
         
         .name-item { padding: 8px; border-bottom: 2px dashed #eee; display: flex; justify-content: space-between; align-items: center; }
         .name-item.eliminated span { text-decoration: line-through; color: var(--c-red); opacity: 0.5; }
         .action-btn { padding: 4px 8px; cursor: pointer; background: #fff; border: 2px solid #2c3e50; border-radius: 5px; font-family: inherit; font-weight: bold; margin-left: 5px; }
+        
+        /* Footer button container fixed height */
+        .modal-footer { flex-shrink: 0; }
 
         /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
@@ -179,6 +196,9 @@
             .classroom-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 5px; }
             .row-label { grid-column: 1 / -1; margin-top: 20px; margin-bottom: 5px; border-bottom: 2px dashed rgba(44, 62, 80, 0.2); padding-bottom: 5px; transform: rotate(0deg); }
             .seat { min-height: 90px; }
+            
+            /* Pada mobile, modal lebih tinggi sedikit */
+            .modal-content { margin: 10% auto; height: 80vh; }
         }
     </style>
 </head>
@@ -209,33 +229,35 @@
 
 <div id="managerModal" class="modal">
     <div class="modal-content">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
             <h2 style="margin:0; color:var(--c-purple);">ABSENSI KELAS</h2>
             <span class="close-btn" onclick="goBack()">X</span>
         </div>
         
-        <div id="normalView" style="display:flex; flex-direction:column; flex-grow:1;">
-            <div style="text-align:right; font-size:14px; margin:5px 0;">Siswa: <span id="studentCount">0</span>/18</div>
-            <div style="display:flex; gap:5px;">
+        <div id="normalView" style="display:flex; flex-direction:column; flex:1; min-height:0;">
+            <div style="text-align:right; font-size:14px; margin:5px 0; flex-shrink:0;">Siswa: <span id="studentCount">0</span>/18</div>
+            <div style="display:flex; gap:5px; flex-shrink:0;">
                 <input type="text" id="newNameInput" class="manager-input" placeholder="Tambah nama..." style="margin:0;" onkeypress="handleEnter(event)">
                 <button class="btn-sketch btn-purple" style="padding:5px 15px;" onclick="addName()">+</button>
             </div>
-            <div style="display:flex; justify-content:space-between; margin-top:10px; align-items:center;">
+            <div style="display:flex; justify-content:space-between; margin-top:10px; align-items:center; flex-shrink:0;">
                  <input type="text" id="searchInput" class="manager-input" placeholder="🔍 Cari siswa..." style="margin:0; font-size:14px; padding:8px;" onkeyup="renderNameList()">
                  <button class="action-btn" style="color:var(--c-blue); border-color:var(--c-blue); margin-left:5px; height:40px;" onclick="openBulkEdit()">📝 Bulk</button>
             </div>
+            
             <div class="name-list" id="nameListContainer"></div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            
+            <div class="modal-footer" style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
                 <button class="btn-sketch" style="font-size:14px; padding:8px; color:var(--c-red);" onclick="eliminateAll()">🚫 Absen Semua</button>
                 <button class="btn-sketch" style="font-size:14px; padding:8px; color:var(--c-green);" onclick="restoreAll()">✅ Hadir Semua</button>
                 <button class="btn-sketch" style="grid-column:span 2; font-size:14px; padding:8px;" onclick="resetToDefault()">↻ Reset Default</button>
             </div>
         </div>
 
-        <div id="bulkView" style="display:none; flex-direction:column; flex-grow:1;">
-            <p style="margin:10px 0 5px 0; font-size:14px; color:#7f8c8d;">Paste daftar nama (1 nama per baris):</p>
-            <textarea id="bulkEditArea" style="width:100%; flex-grow:1; padding:10px; border:var(--border-thick); border-radius:5px; font-family:inherit; overflow-y:auto;"></textarea>
-            <div style="display:flex; gap:10px; margin-top:10px;">
+        <div id="bulkView" style="display:none; flex-direction:column; flex:1; min-height:0;">
+            <p style="margin:10px 0 5px 0; font-size:14px; color:#7f8c8d; flex-shrink:0;">Paste daftar nama (1 nama per baris):</p>
+            <textarea id="bulkEditArea" style="width:100%; padding:10px; border:var(--border-thick); border-radius:5px; font-family:inherit;"></textarea>
+            <div style="display:flex; gap:10px; margin-top:10px; flex-shrink:0;">
                 <button class="btn-sketch" style="flex:1; color:var(--c-red);" onclick="goBack()">Batal</button>
                 <button class="btn-sketch" style="flex:1; color:var(--c-green);" onclick="saveBulkEdit()">Simpan</button>
             </div>
@@ -256,22 +278,35 @@
     let masterNames = defaultNames.map(name => ({ name: name, active: true }));
     let seats = [];
 
+    // --- LOGIKA HISTORY & SCROLL LOCK (FIX SCROLL BACKGROUND) ---
+
     function goBack() {
         history.back();
+    }
+
+    // Fungsi Kunci Scroll Body (Biar background gak gerak di HP)
+    function lockBodyScroll() {
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Fungsi Lepas Kunci Scroll
+    function unlockBodyScroll() {
+        document.body.style.overflow = ''; 
     }
 
     window.onpopstate = function(event) {
         const state = event.state;
         
-        // Reset UI
+        // Reset UI & Unlock Scroll
         document.getElementById('managerModal').style.display = "none";
         document.getElementById('bulkView').style.display = "none";
         document.getElementById('normalView').style.display = "flex";
         document.getElementById("rowDropdown").classList.remove('show');
+        unlockBodyScroll(); // Lepas kunci saat menu tutup
 
-        // Restore View based on state
         if (state && state.view === 'modal') {
             document.getElementById('managerModal').style.display = "block";
+            lockBodyScroll(); // Kunci lagi kalau balik ke modal
             renderNameList();
         }
         
@@ -279,23 +314,24 @@
             document.getElementById('managerModal').style.display = "block";
             document.getElementById('normalView').style.display = 'none'; 
             document.getElementById('bulkView').style.display = 'flex';
+            lockBodyScroll();
         }
 
         if (state && state.view === 'dropdown') {
             document.getElementById("rowDropdown").classList.add('show');
+            // Dropdown kecil, biasanya gak perlu lock scroll, tapi opsional
         }
     };
 
     function openManager() { 
-        // FIX NO 1: Tutup dropdown secara visual jika sedang terbuka
-        // Supaya tidak menutupi modal/tombol
         document.getElementById("rowDropdown").classList.remove('show');
-
         history.pushState({view: 'modal'}, null, "");
         
         document.getElementById('managerModal').style.display = "block"; 
         document.getElementById('normalView').style.display = 'flex'; 
         document.getElementById('bulkView').style.display = 'none';
+        
+        lockBodyScroll(); // KUNCI SCROLL BACKGROUND
         renderNameList(); 
     }
 
@@ -338,13 +374,12 @@
                 goBack();
             }
         }
-        
         if (e.target == document.getElementById('managerModal')) {
              goBack();
         }
     }
 
-    // --- LOGIKA UTAMA ---
+    // --- LOGIKA GRID ---
 
     function initSeats() {
         seats = [];
