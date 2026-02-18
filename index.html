@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Denah Gacha Kelas</title>
+    <title>Denah Kelas Gacha</title>
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -43,38 +43,37 @@
             overflow-x: hidden;
         }
 
+        /* --- SCROLLBAR CUSTOMIZATION (FIX NO 2) --- */
+        /* Biar scrollbar kelihatan di list nama dan bulk edit */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--c-purple); 
+            border: 2px solid var(--paper-bg); 
+            border-radius: 10px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--c-blue); }
+
         .container { width: 100%; max-width: 1200px; margin: 0 auto; }
 
-        /* --- HEADER & CONTROLS --- */
+        /* --- HEADER --- */
         .header-section { 
-            display: flex; 
-            align-items: flex-end; /* Desktop: Rata Bawah */
-            justify-content: flex-start; /* Desktop: Rata Kiri */
-            margin-bottom: 20px; 
-            gap: 20px; 
-            flex-wrap: wrap;
-            padding-left: 10px; 
+            display: flex; align-items: flex-end; justify-content: flex-start; 
+            margin-bottom: 20px; gap: 20px; flex-wrap: wrap; padding-left: 10px; 
         }
 
         .teacher-desk {
             width: 160px; height: 90px;
-            background: var(--grad-wood); 
-            color: #fff;
+            background: var(--grad-wood); color: #fff;
             display: flex; justify-content: center; align-items: center;
             text-align: center; font-size: 22px; font-weight: bold;
-            border: 3px solid #3e2723; 
-            border-radius: 8px 20px 10px 15px; 
+            border: 3px solid #3e2723; border-radius: 8px 20px 10px 15px; 
             box-shadow: 5px 5px 0px rgba(62, 39, 35, 0.4); 
-            transform: rotate(-1deg);
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
-            flex-shrink: 0; z-index: 5;
-            order: 1; /* Default Order Desktop */
+            transform: rotate(-1deg); text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+            flex-shrink: 0; z-index: 5; order: 1;
         }
 
-        .controls { 
-            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding-bottom: 5px; 
-            order: 2; /* Default Order Desktop */
-        }
+        .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding-bottom: 5px; order: 2; }
 
         /* --- BUTTONS --- */
         .btn-sketch {
@@ -105,12 +104,8 @@
         .dropdown-content button:hover { background: var(--grad-blue); color: white; }
         .show { display: block; }
 
-        /* --- GRID KELAS --- */
-        .classroom-grid { 
-            display: grid; 
-            grid-template-columns: repeat(6, 1fr) 80px; 
-            gap: 15px; padding: 10px; align-items: center;
-        }
+        /* --- GRID --- */
+        .classroom-grid { display: grid; grid-template-columns: repeat(6, 1fr) 80px; gap: 15px; padding: 10px; align-items: center; }
 
         .seat {
             aspect-ratio: 4/3; position: relative; display: flex; flex-direction: column;
@@ -139,55 +134,36 @@
         .seat-name { font-weight: bold; text-align: center; width: 100%; line-height: 1.1; text-transform: uppercase; word-break: break-word;}
         .text-normal { font-size: 18px; } .text-medium { font-size: 15px; } .text-small { font-size: 12px; } .text-tiny { font-size: 10px; }
 
-        .row-label { 
-            font-size: 20px; font-weight: bold; transform: rotate(2deg); text-align: center; 
-        }
+        .row-label { font-size: 20px; font-weight: bold; transform: rotate(2deg); text-align: center; }
         .label-r0 { color: var(--c-blue); } .label-r1 { color: var(--c-teal); } .label-r2 { color: var(--c-orange); }
 
         /* --- MODAL --- */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.6); backdrop-filter: blur(4px); }
         .modal-content { background: var(--paper-bg); margin: 5% auto; padding: 20px; width: 90%; max-width: 500px; border-radius: 10px; border: var(--border-thick); height: 85vh; display: flex; flex-direction: column; }
         .manager-input { width: 100%; padding: 10px; border: var(--border-thick); border-radius: 5px; font-family: inherit; font-weight: bold; margin-bottom: 10px; }
-        .name-list { flex-grow: 1; overflow-y: auto; border: var(--border-thick); padding: 5px; border-radius: 5px; background: #fff; margin: 10px 0;}
+        
+        /* FIX NO 2: Scrollbar container */
+        .name-list { 
+            flex-grow: 1; 
+            overflow-y: auto; /* Wajib auto biar scroll muncul */
+            border: var(--border-thick); padding: 5px; border-radius: 5px; background: #fff; margin: 10px 0;
+            scrollbar-color: var(--c-purple) rgba(0,0,0,0.05); /* Firefox support */
+            scrollbar-width: thin;
+        }
+        
         .name-item { padding: 8px; border-bottom: 2px dashed #eee; display: flex; justify-content: space-between; align-items: center; }
         .name-item.eliminated span { text-decoration: line-through; color: var(--c-red); opacity: 0.5; }
         .action-btn { padding: 4px 8px; cursor: pointer; background: #fff; border: 2px solid #2c3e50; border-radius: 5px; font-family: inherit; font-weight: bold; margin-left: 5px; }
 
-        /* --- MOBILE RESPONSIVE (ANDROID FIX) --- */
+        /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
-            .header-section {
-                flex-direction: column; /* Stack Vertikal */
-                align-items: center;
-                padding-left: 0;
-            }
-
-            /* --- FIX POSISI: TOMBOL DI ATAS, MEJA DI BAWAH --- */
-            .controls { 
-                order: 1; /* Tombol Urutan Pertama */
-                width: 100%; 
-                justify-content: center; 
-                display: grid; 
-                grid-template-columns: 1fr 1fr; 
-                margin-bottom: 15px; /* Jarak ke Meja Guru */
-            }
-            .teacher-desk { 
-                order: 2; /* Meja Guru Urutan Kedua */
-                width: 100%; max-width: 250px; 
-                transform: rotate(0deg); 
-                margin-right: 0;
-                margin-bottom: 10px; 
-            }
-            /* ----------------------------------------------- */
-
+            .header-section { flex-direction: column; align-items: center; padding-left: 0; }
+            .controls { order: 1; width: 100%; justify-content: center; display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 15px; }
+            .teacher-desk { order: 2; width: 100%; max-width: 250px; transform: rotate(0deg); margin-right: 0; margin-bottom: 10px; }
             .dropdown { grid-column: span 2; } .dropdown button { width: 100%; }
             .dropdown-content { left: 50%; transform: translateX(-50%); width: 95%; }
-
             .classroom-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 5px; }
-            .row-label { 
-                grid-column: 1 / -1; margin-top: 20px; margin-bottom: 5px;
-                border-bottom: 2px dashed rgba(44, 62, 80, 0.2);
-                padding-bottom: 5px; transform: rotate(0deg);
-            }
+            .row-label { grid-column: 1 / -1; margin-top: 20px; margin-bottom: 5px; border-bottom: 2px dashed rgba(44, 62, 80, 0.2); padding-bottom: 5px; transform: rotate(0deg); }
             .seat { min-height: 90px; }
         }
     </style>
@@ -221,7 +197,7 @@
     <div class="modal-content">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; color:var(--c-purple);">ABSENSI KELAS</h2>
-            <span style="font-size:24px; cursor:pointer; color:var(--c-red); font-weight:bold;" onclick="triggerBack()">X</span>
+            <span style="font-size:24px; cursor:pointer; color:var(--c-red); font-weight:bold;" onclick="goBack()">X</span>
         </div>
         
         <div id="normalView" style="display:flex; flex-direction:column; flex-grow:1;">
@@ -232,7 +208,7 @@
             </div>
             <div style="display:flex; justify-content:space-between; margin-top:10px; align-items:center;">
                  <input type="text" id="searchInput" class="manager-input" placeholder="🔍 Cari siswa..." style="margin:0; font-size:14px; padding:8px;" onkeyup="renderNameList()">
-                 <button class="action-btn" style="color:var(--c-blue); border-color:var(--c-blue); margin-left:5px; height:40px;" onclick="showBulkEdit()">📝 Bulk</button>
+                 <button class="action-btn" style="color:var(--c-blue); border-color:var(--c-blue); margin-left:5px; height:40px;" onclick="openBulkEdit()">📝 Bulk</button>
             </div>
             <div class="name-list" id="nameListContainer"></div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
@@ -244,9 +220,9 @@
 
         <div id="bulkView" style="display:none; flex-direction:column; flex-grow:1;">
             <p style="margin:10px 0 5px 0; font-size:14px; color:#7f8c8d;">Paste daftar nama (1 nama per baris):</p>
-            <textarea id="bulkEditArea" style="width:100%; flex-grow:1; padding:10px; border:var(--border-thick); border-radius:5px; font-family:inherit;"></textarea>
+            <textarea id="bulkEditArea" style="width:100%; flex-grow:1; padding:10px; border:var(--border-thick); border-radius:5px; font-family:inherit; overflow-y:auto;"></textarea>
             <div style="display:flex; gap:10px; margin-top:10px;">
-                <button class="btn-sketch" style="flex:1; color:var(--c-red);" onclick="hideBulkEdit()">Batal</button>
+                <button class="btn-sketch" style="flex:1; color:var(--c-red);" onclick="goBack()">Batal</button>
                 <button class="btn-sketch" style="flex:1; color:var(--c-green);" onclick="saveBulkEdit()">Simpan</button>
             </div>
         </div>
@@ -265,6 +241,129 @@
 
     let masterNames = defaultNames.map(name => ({ name: name, active: true }));
     let seats = [];
+
+    // --- LOGIKA HISTORY API & NAVIGASI (FIX NO 1 & 3) ---
+    
+    // Fungsi pembantu untuk tombol fisik/UI yang sifatnya "Mundur"
+    function goBack() {
+        history.back();
+    }
+
+    // LISTENER UTAMA: Mendeteksi saat tombol Back Android ditekan
+    window.onpopstate = function(event) {
+        // Kita cek state mana yang aktif
+        const state = event.state;
+        
+        // Reset UI dulu ke keadaan bersih (Tutup semua popup)
+        document.getElementById('managerModal').style.display = "none";
+        document.getElementById('bulkView').style.display = "none";
+        document.getElementById('normalView').style.display = "flex";
+        document.getElementById("rowDropdown").classList.remove('show');
+
+        // Kalau state null (Halaman Utama), ya sudah selesai (semua tertutup).
+        
+        // Kalau state 'modal', buka Modal (Normal View)
+        if (state && state.view === 'modal') {
+            document.getElementById('managerModal').style.display = "block";
+            renderNameList();
+        }
+        
+        // Kalau state 'bulk', buka Modal + Bulk View
+        // (Ini jarang terjadi saat Back, biasanya saat Forward, tapi jaga-jaga)
+        if (state && state.view === 'bulk') {
+            document.getElementById('managerModal').style.display = "block";
+            document.getElementById('normalView').style.display = 'none'; 
+            document.getElementById('bulkView').style.display = 'flex';
+        }
+
+        // Kalau state 'dropdown', buka Dropdown
+        if (state && state.view === 'dropdown') {
+            document.getElementById("rowDropdown").classList.add('show');
+        }
+    };
+
+    // Fungsi Buka Manager
+    function openManager() { 
+        // Push state: Kita masuk ke layer 'modal'
+        history.pushState({view: 'modal'}, null, "");
+        
+        document.getElementById('managerModal').style.display = "block"; 
+        // Reset view modal ke normal setiap kali buka baru
+        document.getElementById('normalView').style.display = 'flex'; 
+        document.getElementById('bulkView').style.display = 'none';
+        renderNameList(); 
+    }
+
+    // Fungsi Buka Bulk Edit
+    function openBulkEdit() {
+        // Push state: Kita masuk ke layer 'bulk' di atas 'modal'
+        history.pushState({view: 'bulk'}, null, "");
+
+        document.getElementById('normalView').style.display = 'none'; 
+        document.getElementById('bulkView').style.display = 'flex'; 
+        document.getElementById('bulkEditArea').value = masterNames.map(n => n.name).join('\n'); 
+    }
+
+    // Fungsi Simpan Bulk
+    function saveBulkEdit() {
+        let lines = document.getElementById('bulkEditArea').value.split('\n').map(s => s.trim().toUpperCase()).filter(s => s);
+        if(lines.length > 18) { alert("Maks 18 nama!"); return; }
+        
+        masterNames = lines.map(n => ({name:n, active:true}));
+        
+        // Setelah simpan, kita anggap selesai urusan Bulk, jadi panggil goBack()
+        // Ini akan trigger onpopstate, yang otomatis akan melihat state sebelumnya adalah 'modal'
+        // Jadi dia akan nutup bulk dan nampilin modal normal. Ajaib kan?
+        goBack();
+        
+        // Update data di background (popstate akan handle render UI nya)
+        seats.forEach(s => { s.currentName = ""; s.locked = false; }); 
+        distributeNames(); 
+        renderSeats();
+    }
+
+    // Fungsi Toggle Dropdown
+    function toggleDropdown() { 
+        const dp = document.getElementById("rowDropdown");
+        if (dp.classList.contains("show")) {
+            // Kalau lagi buka terus diklik tombolnya, berarti mau tutup -> Mundur history
+            goBack();
+        } else {
+            // Kalau mau buka -> Push state 'dropdown'
+            history.pushState({view: 'dropdown'}, null, "");
+            dp.classList.add("show");
+        }
+    }
+
+    // Handle tombol ESC di desktop
+    document.addEventListener('keydown', (e) => { 
+        if(e.key === "Escape") {
+            // Cek apakah ada history state yang aktif? Kalau ada, mundur.
+            if (history.state) {
+                goBack();
+            }
+        }
+    });
+
+    // Klik di luar dropdown/modal untuk menutup
+    window.onclick = function(e) {
+        // Khusus Dropdown
+        if (!e.target.matches('#btnRowRandom')) {
+            // Cek apakah dropdown lagi nampil?
+            if (document.getElementById("rowDropdown").classList.contains('show')) {
+                // Kalau nampil dan klik di luar -> Back
+                goBack();
+            }
+        }
+        
+        // Khusus Modal (klik area gelap)
+        if (e.target == document.getElementById('managerModal')) {
+            // Kalau modal lagi nampil dan klik luar -> Back
+             goBack();
+        }
+    }
+
+    // --- LOGIKA UTAMA (TIDAK BERUBAH BANYAK) ---
 
     function initSeats() {
         seats = [];
@@ -321,7 +420,9 @@
         shuffleArray(names);
         targetSeats.forEach((seat, i) => seat.currentName = names[i] || "");
         renderSeats();
-        document.getElementById("rowDropdown").classList.remove("show");
+        
+        // Tutup dropdown setelah pilih (pakai goBack karena dropdown open = history state)
+        goBack();
     }
 
     function toggleLock(index, e) {
@@ -331,57 +432,6 @@
 
     function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
 
-    function toggleDropdown() { document.getElementById("rowDropdown").classList.toggle("show"); }
-    
-    window.onclick = function(e) {
-        if (!e.target.matches('#btnRowRandom')) document.getElementById("rowDropdown").classList.remove('show');
-        if (e.target == document.getElementById('managerModal')) triggerBack();
-    }
-    
-    // --- ANDROID BACK BUTTON LOGIC (HISTORY API) ---
-    
-    // 1. Fungsi Buka Modal: Push state ke history
-    function openManager() { 
-        // Push state baru supaya tombol back bisa mendeteksi perubahan
-        history.pushState({modalOpen: true}, null, "");
-        document.getElementById('managerModal').style.display = "block"; 
-        hideBulkEdit(); renderNameList(); 
-    }
-
-    // 2. Fungsi Tutup Modal via Tombol X: Panggil history.back()
-    // Ini akan memicu event 'popstate' di bawah
-    function triggerBack() {
-        history.back();
-    }
-
-    // 3. Fungsi Tutup Modal 'Asli' (Dipanggil oleh popstate)
-    function closeManagerInternal() { 
-        document.getElementById('managerModal').style.display = "none";
-        seats.forEach(s => {
-            const p = masterNames.find(n => n.name === s.currentName);
-            if(!p || !p.active) { s.currentName = ""; s.locked = false; }
-        });
-        renderSeats();
-    }
-
-    // 4. Event Listener Tombol Back HP
-    window.addEventListener('popstate', function(event) {
-        const modal = document.getElementById('managerModal');
-        // Jika modal sedang terbuka, tutup!
-        if (modal.style.display === 'block') {
-            closeManagerInternal();
-        }
-    });
-
-    // Event Listener Tombol ESC (Desktop) - Optional tapi bagus ada
-    document.addEventListener('keydown', (e) => { 
-        if(e.key === "Escape") {
-             if(document.getElementById('managerModal').style.display === 'block') triggerBack();
-             document.getElementById("rowDropdown").classList.remove('show');
-        }
-    });
-
-    // --- MANAGER FUNCTIONS ---
     function renderNameList() {
         const list = document.getElementById('nameListContainer');
         const query = document.getElementById('searchInput').value.toUpperCase();
@@ -413,14 +463,6 @@
     function eliminateAll() { if(confirm("Absenkan semua?")) { masterNames.forEach(n => n.active = false); renderNameList(); }}
     function restoreAll() { masterNames.forEach(n => n.active = true); renderNameList(); }
     function resetToDefault() { if(confirm("Reset data?")) { masterNames = defaultNames.map(n => ({name:n, active:true})); renderNameList(); seats.forEach(s => { s.currentName = ""; s.locked = false; }); distributeNames(); renderSeats(); }}
-
-    function showBulkEdit() { document.getElementById('normalView').style.display = 'none'; document.getElementById('bulkView').style.display = 'flex'; document.getElementById('bulkEditArea').value = masterNames.map(n => n.name).join('\n'); }
-    function hideBulkEdit() { document.getElementById('normalView').style.display = 'flex'; document.getElementById('bulkView').style.display = 'none'; }
-    function saveBulkEdit() {
-        let lines = document.getElementById('bulkEditArea').value.split('\n').map(s => s.trim().toUpperCase()).filter(s => s);
-        if(lines.length > 18) { alert("Maks 18 nama!"); return; }
-        masterNames = lines.map(n => ({name:n, active:true})); hideBulkEdit(); renderNameList(); seats.forEach(s => { s.currentName = ""; s.locked = false; }); distributeNames(); renderSeats();
-    }
 
     initSeats();
 </script>
