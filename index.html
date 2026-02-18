@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gacha Bangku: Guild Edition (Gender Fixed)</title>
+    <title>Gacha Bangku: Guild Edition </title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -126,8 +126,7 @@
 
         .char-img-container {
             width: 100%; height: 70%; overflow: hidden; position: relative;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 10px 10px;
+            background-color: rgba(255,255,255,0.05); /* Placeholder color */
         }
         
         .char-img {
@@ -313,7 +312,7 @@
         "DESPIA ALIYAWATI": "F",
         "FAIQ ATA AMRU": "M",
         "ESTHER ANGGUN S.": "F",
-        "REGA RINDIANA": "F", // Asumsi Rindiana = Cewek
+        "REGA RINDIANA": "F",
         "DENDRA RAMADANI": "M",
         "MOHAMMAD IBAD F.": "M"
     };
@@ -393,38 +392,36 @@
     // --- AVATAR & GENDER LOGIC ---
     
     function detectGender(name) {
-        // Cek database dulu
         if (knownGenders[name]) return knownGenders[name];
-        
-        // Kalau nama baru, tebak (Heuristic simple)
         const n = name.toUpperCase();
         if (n.includes("PUTRI") || n.includes("AYU") || n.includes("NUR") || n.includes("SITI") || n.includes("INTAN")) return "F";
-        return "M"; // Default Cowok
+        return "M"; 
     }
 
     function getAvatarUrl(name) {
         if (!name) return "";
         const gender = detectGender(name);
-        // Seed gabungan Nama + Session ID -> Berubah tiap buka web, tapi konsisten selama sesi berjalan
         const seed = name + "_" + sessionSeed; 
         
-        // Kita pakai style 'avataaars' karena bisa kontrol rambut (gender)
-        let url = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf`;
+        // GUNAKAN VERSI 7.x (LEBIH STABIL) DAN STYLE 'PERSONAS' (LEBIH SIMPEL)
+        // Jika style ini gagal, fungsi 'handleImageError' di bawah akan otomatis menggantinya.
+        let url = `https://api.dicebear.com/7.x/personas/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf`;
         
         if (gender === "F") {
-            // Paksa rambut panjang & tanpa jenggot
-            url += "&top=longHair,longHairBob,longHairBun,longHairCurly,longHairStraight,longHairStraight2";
-            url += "&facialHair=none";
-            url += "&accessories=kurt,prescription01,round,sunglasses,wayfarers,none,none,none,none";
-            url += "&clothing=blazerAndShirt,collarAndSweater,graphicShirt,shirtCrewNeck,shirtScoopNeck,shirtVNeck";
+            url += "&hair=long,bob,curly,curlyHigh,straight"; // Cewek: Rambut Panjang
+            url += "&facialHair=none"; 
         } else {
-            // Paksa rambut pendek & acak jenggot
-            url += "&top=shortHair,shortHairDreads01,shortHairDreads02,shortHairFrizzle,shortHairShaggyMullet,shortHairShortCurly,shortHairShortFlat,shortHairShortRound,shortHairShortWaved,shortHairSides,shortHairTheCaesar";
-            url += "&facialHair=beardLight,beardMedium,beardMajestic,mustacheFancy,none,none,none,none,none,none";
-            url += "&clothing=blazerAndShirt,collarAndSweater,graphicShirt,hoodie,shirtCrewNeck,shirtScoopNeck,shirtVNeck";
+            url += "&hair=short,balding,buzz,fade,sideShave"; // Cowok: Rambut Pendek
+            url += "&facialHairProbability=50"; // Cowok: Kadang jenggotan
         }
         
         return url;
+    }
+
+    // FUNGSI FALLBACK: Kalau gambar rusak, ganti ke Inisial Nama (UI Avatars)
+    function handleImageError(img, name) {
+        img.onerror = null; // Prevent infinite loop
+        img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128&bold=true`;
     }
 
     // --- GAME LOGIC ---
@@ -458,10 +455,11 @@
                 if(row === 1) stars = "★★★★";
                 if(row === 2) stars = "★★★";
 
+                // Tambahkan 'onerror="handleImageError(this, ...)"' untuk fallback otomatis
                 seatDiv.innerHTML = `
                     <div class="lock-box" onclick="toggleLock(${index}, event)">${lockIcon}</div>
                     <div class="char-img-container">
-                        <img src="${avatarUrl}" class="char-img" alt="">
+                        <img src="${avatarUrl}" class="char-img" alt="" onerror="handleImageError(this, '${nameHTML}')">
                     </div>
                     <div class="char-info">
                         <div class="seat-name ${sizeClass}">${nameHTML}</div>
