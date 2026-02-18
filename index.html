@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gacha Bangku: Guild Edition</title>
+    <title>Gacha Bangku: Guild Edition (Final Fix)</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -181,7 +181,7 @@
         /* --- MODAL --- */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
         .modal-content { 
-            background: var(--ui-panel); color: var(--text-main);
+            background: var(--ui-panel); color: #000; /* FORCE BLACK TEXT */
             margin: 5% auto; padding: 25px; width: 90%; max-width: 550px; 
             border-radius: 4px; height: 85vh; max-height: 85vh; display: flex; flex-direction: column; 
             box-shadow: 0 0 0 4px rgba(255,255,255,0.1), 0 20px 50px rgba(0,0,0,0.8);
@@ -191,15 +191,24 @@
         .modal-title { margin: 0; font-family: 'Cinzel', serif; color: var(--ui-dark); font-size: 24px; }
         .close-btn { width: 30px; height: 30px; background: #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; color: #555; transition: 0.2s; }
         .close-btn:hover { background: #3b425d; color: #fff; }
-        .manager-input { width: 100%; padding: 12px; border: none; background: #fff; border-radius: 20px; font-family: inherit; font-weight: bold; color: var(--ui-dark); margin-bottom: 10px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+        .manager-input { width: 100%; padding: 12px; border: none; background: #fff; border-radius: 20px; font-family: inherit; font-weight: bold; color: #000; margin-bottom: 10px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
         .manager-input:focus { outline: none; box-shadow: 0 0 0 2px var(--star-5); }
         .name-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; background: rgba(255,255,255,0.5); padding: 5px; border-radius: 8px; margin: 10px 0; }
-        .name-item { padding: 12px; margin-bottom: 6px; border-radius: 6px; background: #fff; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.1s; }
+        
+        /* FIX TEXT COLOR LIST */
+        .name-item { 
+            padding: 12px; margin-bottom: 6px; border-radius: 6px; background: #fff; 
+            display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.1s;
+            color: #000; /* Hitam Pekat */
+            font-weight: 700;
+        }
         .name-item:hover { transform: translateX(5px); border-left: 4px solid var(--star-5); }
-        .name-item.eliminated span { opacity: 0.4; text-decoration: line-through; }
+        .name-item.eliminated span { opacity: 0.4; text-decoration: line-through; color: #c0392b; }
+        
         .action-btn { width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: 5px; font-size: 12px; transition: 0.2s; }
         .btn-edit { background: #d4e4ff; color: #2980b9; } .btn-del { background: #fadbd8; color: #c0392b; } .btn-status { background: #abebc6; color: #27ae60; width: auto; padding: 0 10px; border-radius: 12px; }
-        #bulkEditArea { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 10px; border-radius: 8px; border: none; font-family: monospace; }
+        #bulkEditArea { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 10px; border-radius: 8px; border: none; font-family: monospace; color:#000; }
 
         @media (max-width: 768px) {
             .header-section { flex-direction: column; align-items: center; padding-left: 0; gap: 10px;}
@@ -373,7 +382,7 @@
         if (e.target == document.getElementById('managerModal')) goBack();
     }
 
-    // --- AVATAR & GENDER LOGIC (PNG MODE) ---
+    // --- AVATAR & GENDER LOGIC (SVG v7.x - LEBIH STABIL) ---
     
     function detectGender(name) {
         if (knownGenders[name]) return knownGenders[name];
@@ -387,28 +396,28 @@
         const gender = detectGender(name);
         const seed = name + "_" + sessionSeed; 
         
-        // PAKE FORMAT PNG BIAR KOMPATIBEL SAMA SEMUA BROWSER/JARINGAN
-        // Style 'avataaars' paling aman buat gender
-        let url = `https://api.dicebear.com/9.x/avataaars/png?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf`;
+        // PAKE API V7.x biar lebih stabil
+        let url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf`;
         
         if (gender === "F") {
-            // Cewek: Paksa rambut panjang, tanpa kumis
-            url += "&top=longHair,longHairBob,longHairBun,longHairCurly,longHairStraight,longHairStraight2";
+            url += "&top=longHair,longHairBob,longHairBun,longHairCurly,longHairStraight";
             url += "&facialHair=none"; 
         } else {
-            // Cowok: Paksa rambut pendek
-            url += "&top=shortHair,shortHairDreads01,shortHairDreads02,shortHairFrizzle,shortHairShaggyMullet,shortHairShortCurly,shortHairShortFlat,shortHairShortRound,shortHairShortWaved,shortHairSides,shortHairTheCaesar";
-            // Random kumis/jenggot dikit biar variatif
+            url += "&top=shortHair,shortHairDreads01,shortHairFrizzle,shortHairShaggyMullet,shortHairShortCurly";
             url += "&facialHairProbability=20"; 
         }
         
         return url;
     }
 
-    // FALLBACK KALAU DICEBEAR MATI/ERROR -> PAKE INISIAL NAMA
+    // FALLBACK CERDAS: WARNA BACKGROUND SESUAI GENDER (MERAH/BIRU)
     function handleImageError(img, name) {
+        const gender = detectGender(name);
+        // Cewek: Pink/Merah (ffadad), Cowok: Biru (a0c4ff)
+        const bgColor = (gender === "F") ? "ffadad" : "a0c4ff";
+        
         img.onerror = null;
-        img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128&bold=true`;
+        img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${bgColor}&color=fff&size=128&bold=true`;
     }
 
     // --- GAME LOGIC ---
@@ -445,7 +454,7 @@
                 seatDiv.innerHTML = `
                     <div class="lock-box" onclick="toggleLock(${index}, event)">${lockIcon}</div>
                     <div class="char-img-container">
-                        <img src="${avatarUrl}" class="char-img" alt="Hero" loading="lazy" onerror="handleImageError(this, '${nameHTML}')">
+                        <img src="${avatarUrl}" class="char-img" alt="Avatar" onerror="handleImageError(this, '${nameHTML}')">
                     </div>
                     <div class="char-info">
                         <div class="seat-name ${sizeClass}">${nameHTML}</div>
