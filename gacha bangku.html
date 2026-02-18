@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denah Kelas Crayon Style (Navigasi ESC Fixed)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- PALET WARNA CRAYON --- */
+            --paper-bg: #fffdf0;
+            --ink-color: #2c3e50;
+            
+            /* Gradasi Crayon */
+            --grad-blue: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
+            --grad-teal: linear-gradient(135deg, #22a6b3 0%, #7ed6df 100%);
+            --grad-orange: linear-gradient(135deg, #f0932b 0%, #ffbe76 100%);
+            --grad-purple: linear-gradient(135deg, #be2edd 0%, #e056fd 100%);
+            --grad-yellow: linear-gradient(135deg, #f9ca24 0%, #f6e58d 100%);
+            --grad-red: linear-gradient(135deg, #eb4d4b 0%, #ff7979 100%);
+            --grad-green: linear-gradient(135deg, #6ab04c 0%, #badc58 100%);
+            --grad-wood: linear-gradient(160deg, #8d6e63 0%, #5d4037 100%);
+
+            /* Warna Solid */
+            --c-blue: #4834d4;
+            --c-teal: #22a6b3;
+            --c-orange: #f0932b;
+            --c-purple: #be2edd;
+            --c-red: #eb4d4b;
+            --c-green: #6ab04c;
+
+            /* Tekstur Arsir Pensil */
+            --texture-pencil: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 5px,
+                rgba(0,0,0,0.02) 5px,
+                rgba(0,0,0,0.02) 6px
+            );
+
+            /* Warna Latar Lembut */
+            --wash-blue: linear-gradient(to bottom right, rgba(72, 52, 212, 0.05), rgba(72, 52, 212, 0.15));
+            --wash-teal: linear-gradient(to bottom right, rgba(34, 166, 179, 0.05), rgba(34, 166, 179, 0.15));
+            --wash-orange: linear-gradient(to bottom right, rgba(240, 147, 43, 0.05), rgba(240, 147, 43, 0.15));
+
+            --border-thick: 3px solid var(--ink-color);
+            --sketch-shadow: 4px 4px 0px rgba(44, 62, 80, 0.15);
+        }
+
+        body {
+            font-family: 'Patrick Hand', cursive;
+            background-color: var(--paper-bg);
+            background-image: 
+                radial-gradient(#dcdde1 1px, transparent 1px),
+                var(--texture-pencil);
+            background-size: 20px 20px, 100% 100%;
+            
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; padding: 20px;
+            color: var(--ink-color);
+            overflow-y: auto; 
+        }
+
+        .container { width: 100%; max-width: 1200px; position: relative; }
+
+        /* HEADER */
+        .header-section { display: flex; align-items: flex-start; margin-bottom: 40px; position: relative; }
+
+        .teacher-desk {
+            width: 140px; height: 85px;
+            background: var(--grad-wood); 
+            color: #fff;
+            display: flex; justify-content: center; align-items: center;
+            text-align: center; font-size: 20px; font-weight: bold;
+            border: 3px solid #3e2723; border-radius: 8px 20px 10px 15px; 
+            box-shadow: 5px 5px 0px rgba(62, 39, 35, 0.4); 
+            transform: rotate(-2deg);
+            margin-right: 50px;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+        }
+
+        .controls { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+
+        /* BASE BUTTON STYLE */
+        .btn-sketch, .dropdown-content, .modal-content {
+             border: var(--border-thick);
+             border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+             box-shadow: var(--sketch-shadow);
+             transition: all 0.2s; background: #fff;
+             padding: 12px 25px; font-size: 18px; font-weight: bold; cursor: pointer; font-family: inherit;
+             position: relative; overflow: hidden;
+        }
+        
+        .btn-sketch:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
+
+        /* WARNA TOMBOL */
+        .btn-orange { color: var(--c-orange); }
+        .btn-orange:hover { background: var(--grad-orange); color: white; border-color: #d35400; transform: rotate(-1deg) scale(1.05); }
+        
+        .btn-blue { color: var(--c-blue); }
+        .btn-blue:hover, .dropdown-content button:hover { background: var(--grad-blue); color: white; border-color: #192a56; transform: rotate(1deg) scale(1.05); }
+
+        .btn-purple { color: var(--c-purple); }
+        .btn-purple:hover { background: var(--grad-purple); color: white; border-color: #8e44ad; transform: rotate(-1deg) scale(1.05); }
+
+        /* DROPDOWN */
+        .dropdown { position: relative; }
+        .dropdown-content { display: none; position: absolute; top: 110%; left: 0; background: #fff; z-index: 10; min-width: 190px; padding: 5px; border-radius: 10px; }
+        .dropdown-content button { 
+            width: 100%; text-align: left; border: none; border-bottom: 2px dashed #eee; 
+            padding: 10px; background: transparent; font-weight: bold; cursor: pointer; 
+            font-family: inherit; font-size: 16px; color: var(--ink-color); transition: 0.2s;
+        }
+        .dropdown-content button:last-child { border-bottom: none; }
+        .show { display: block; }
+
+        /* GRID */
+        .classroom-grid { display: grid; grid-template-columns: repeat(6, 1fr) 110px; gap: 25px; padding: 10px; }
+
+        .row-label { display: flex; align-items: center; padding-left: 15px; font-size: 24px; font-weight: bold; transform: rotate(2deg); text-shadow: 2px 2px 0px rgba(0,0,0,0.05); }
+        .label-r0 { color: var(--c-blue); }
+        .label-r1 { color: var(--c-teal); }
+        .label-r2 { color: var(--c-orange); }
+
+        /* BANGKU SKETSA */
+        .seat {
+            aspect-ratio: 4/3; position: relative; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 15px;
+            border: var(--border-thick); 
+            border-radius: 10px 20px 15px 10px;
+            box-shadow: var(--sketch-shadow); transition: all 0.2s; background: #fff;
+        }
+
+        /* WARNA PER BARIS */
+        .seat-row-0 { background-image: var(--wash-blue), var(--texture-pencil); }
+        .seat-row-0:hover { background: var(--grad-blue); color: white; border-color: #192a56; box-shadow: 6px 6px 0px rgba(25, 42, 86, 0.3); transform: rotate(-1deg) scale(1.05); }
+        .seat-row-0:hover .seat-number { color: rgba(255,255,255,0.7); }
+
+        .seat-row-1 { background-image: var(--wash-teal), var(--texture-pencil); }
+        .seat-row-1:hover { background: var(--grad-teal); color: white; border-color: #006266; box-shadow: 6px 6px 0px rgba(0, 98, 102, 0.3); transform: rotate(1deg) scale(1.05); }
+        .seat-row-1:hover .seat-number { color: rgba(255,255,255,0.7); }
+
+        .seat-row-2 { background-image: var(--wash-orange), var(--texture-pencil); }
+        .seat-row-2:hover { background: var(--grad-orange); color: white; border-color: #d35400; box-shadow: 6px 6px 0px rgba(211, 84, 0, 0.3); transform: rotate(-1deg) scale(1.05); }
+        .seat-row-2:hover .seat-number { color: rgba(255,255,255,0.7); }
+
+        /* TERKUNCI */
+        .seat.is-locked {
+            background: var(--grad-yellow) !important;
+            border-color: #f39c12 !important;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05), var(--sketch-shadow) !important;
+            transform: none !important;
+            color: #d35400 !important;
+        }
+        .seat.is-locked .seat-name { text-shadow: 1px 1px 0 rgba(255,255,255,0.5); }
+
+        .lock-box {
+            position: absolute; top: -10px; right: -10px; width: 34px; height: 34px;
+            border: var(--border-thick); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 16px; background: #fff;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1); z-index: 2; transition: 0.2s;
+        }
+        .lock-box:hover { transform: scale(1.1); }
+        .seat.is-locked .lock-box { background: var(--ink-color); border-color: #fff; color: var(--grad-yellow); }
+
+        .seat-number { position: absolute; bottom: 8px; left: 10px; font-weight: bold; font-size: 14px; color: rgba(44, 62, 80, 0.4); }
+        .seat-name { font-weight: bold; text-align: center; width: 100%; line-height: 1.1; text-transform: uppercase; }
+        .text-normal { font-size: 20px; } .text-medium { font-size: 17px; } .text-small { font-size: 14px; } .text-tiny { font-size: 12px; }
+
+        /* MODAL */
+        .modal { 
+            display: none; position: fixed; z-index: 100; left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(44, 62, 80, 0.5); 
+            backdrop-filter: blur(4px); 
+            overflow-y: auto;
+        }
+        
+        .modal-content { 
+            background: var(--paper-bg); 
+            margin: 5% auto; padding: 30px; width: 90%; max-width: 600px; 
+            transform: rotate(1deg); display: flex; flex-direction: column; position: relative;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.2); border-radius: 10px;
+        }
+        
+        .close { float: right; font-size: 32px; cursor: pointer; font-weight: bold; color: var(--c-red); margin-left: 10px; transition:0.2s;}
+        .close:hover { transform: rotate(90deg) scale(1.2); }
+        
+        .manager-input { 
+            width: 100%; padding: 12px; border: var(--border-thick); border-radius: 5px;
+            margin-bottom: 10px; font-family: inherit; font-size: 18px; font-weight: bold; box-sizing: border-box; background: #fff;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .manager-input:focus { outline: none; border-color: var(--c-purple); box-shadow: 0 0 0 3px rgba(190, 46, 221, 0.2); }
+
+        .name-list { 
+            max-height: 40vh; overflow-y: auto; border: var(--border-thick); 
+            padding: 10px; border-radius: 5px; background: #fff; margin-top: 10px; flex-grow: 1;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .name-item { padding: 8px; border-bottom: 2px dashed #e0e0e0; display: flex; justify-content: space-between; align-items: center; font-size: 18px;}
+        .name-item.eliminated span { text-decoration: line-through; color: var(--c-red); font-style: italic; opacity: 0.6;}
+        
+        .item-actions { display: flex; gap: 5px; }
+        .action-btn { 
+            font-size: 14px; padding: 5px 8px; cursor: pointer; background: #fff; font-family: inherit; font-weight: bold;
+            border: 2px solid var(--ink-color); border-radius: 8px; box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center; min-width: 30px;
+        }
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 rgba(0,0,0,0.2); }
+        .btn-edit { color: var(--c-blue); border-color: var(--c-blue); background: #f0f4ff; }
+        .btn-del { color: var(--c-red); border-color: var(--c-red); background: #fff0f0; }
+        .btn-add:disabled { background: #eee; color: #aaa; border-color: #aaa; box-shadow: none; cursor: not-allowed; }
+        
+        .info-count { text-align: right; font-size: 14px; color: var(--crayon-gray); margin-top: 5px; font-weight:bold;}
+
+        #bulkEditArea {
+            display: block; width: 100%; margin-top: 10px; padding: 15px;
+            font-family: inherit; font-size: 16px; font-weight: bold;
+            border: var(--border-thick); border-radius: 5px;
+            resize: vertical; background: #fff; color: var(--ink-color);
+            min-height: 300px; box-sizing: border-box;
+            box-shadow: inset 3px 3px 10px rgba(0,0,0,0.05);
+        }
+        #bulkEditArea:focus { outline: none; border-color: var(--c-purple); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <div class="teacher-desk">MEJA<br>GURU</div>
+        <div class="controls">
+            <button class="btn-sketch btn-orange" onclick="shuffleAll()">ACAK SEMUA!</button>
+            <div class="dropdown">
+                <button class="btn-sketch btn-blue" onclick="toggleDropdown()" id="btnRowRandom">ACAK PER BARIS &#9662;</button>
+                <div id="rowDropdown" class="dropdown-content">
+                    <button onclick="shuffleSpecificRows([0])">Baris 1 (Biru)</button>
+                    <button onclick="shuffleSpecificRows([1])">Baris 2 (Teal)</button>
+                    <button onclick="shuffleSpecificRows([2])">Baris 3 (Oranye)</button>
+                    <button onclick="shuffleSpecificRows([0, 1])">Baris 1 & 2</button>
+                    <button onclick="shuffleSpecificRows([1, 2])">Baris 2 & 3</button>
+                    <button onclick="shuffleSpecificRows([0, 2])">Baris 1 & 3</button>
+                </div>
+            </div>
+            <button class="btn-sketch btn-purple" onclick="openManager()">✐ MASTER DATA</button>
+        </div>
+    </div>
+
+    <div id="classroom" class="classroom-grid"></div>
+</div>
+
+<div id="managerModal" class="modal">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <h2 id="modalTitle" style="margin:0; text-transform:uppercase; color: var(--c-purple);">Master Data</h2>
+                <button id="btnShowBulk" class="action-btn" style="color:var(--c-blue); border-color:var(--c-blue); font-size:12px; padding:5px 10px;" onclick="showBulkEdit()">📝 Edit Bulk</button>
+            </div>
+            <span class="close" onclick="closeManager()">X</span>
+        </div>
+        
+        <div id="normalView">
+            <div class="info-count">Siswa: <span id="studentCount">0</span>/18</div>
+
+            <div style="display:flex; gap:10px; margin-top: 10px;">
+                <input type="text" id="newNameInput" class="manager-input" style="margin:0;" placeholder="Tambah nama baru...">
+                <button id="btnAdd" class="btn-sketch btn-purple btn-add" style="padding:10px 15px; font-size: 24px; line-height:0.5;" onclick="addName()">+</button>
+            </div>
+
+            <input type="text" id="searchInput" class="manager-input" style="margin-top:10px;" placeholder="🔍 Cari siswa..." onkeyup="renderNameList()">
+            
+            <div class="name-list" id="nameListContainer"></div>
+
+            <div style="display:flex; gap:10px; margin-top: 15px; flex-wrap: wrap;">
+                <button class="btn-sketch" style="flex:1; color:var(--ink-color); border-color:var(--ink-color); font-size:14px; padding: 8px;" onclick="resetToDefault()">↻ Reset</button>
+                <button class="btn-sketch" style="flex:1; color:var(--c-red); border-color:var(--c-red); font-size:14px; padding: 8px;" onclick="eliminateAll()">🚫 Absen Semua</button>
+                <button class="btn-sketch" style="flex:1; color:var(--c-green); border-color:var(--c-green); font-size:14px; padding: 8px;" onclick="restoreAll()">✅ Hadir Semua</button>
+            </div>
+        </div>
+
+        <div id="bulkView" style="display:none; flex-direction:column; flex-grow:1;">
+            <p style="margin: 10px 0 5px 0; font-size:14px; color:var(--crayon-gray);">
+                Paste daftar nama di sini (pisahkan dengan ENTER).<br>Maksimal 18 nama.
+            </p>
+            <textarea id="bulkEditArea" placeholder="Nama A&#10;Nama B&#10;Nama C..."></textarea>
+            <div style="display:flex; gap:10px; margin-top: 15px;">
+                <button class="btn-sketch" style="flex:1; color:var(--c-red); border-color:var(--c-red);" onclick="hideBulkEdit()">Batal</button>
+                <button class="btn-sketch" style="flex:1; color:var(--c-green); border-color:var(--c-green);" onclick="saveBulkEdit()">Simpan Data</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const defaultNames = [
+        "RAHMA KAMILA", "TASYA INTAN RAMADHANI", "AKHSIN AMIRULLOH ELQONI", 
+        "ZERLINA DIAH MAHARANI", "YEHEZKIEL RAMLAN", "MAYANG MELDA DIANSA", 
+        "JESSICA PUTRI NATASYA", "GALIH TRI PAMUNGKAS", "ALIM MURSID", 
+        "FARIHA NUR AZIZAH", "CALVIN JEREMIA NATALINO K", "LUKMAN HARIS MAS AGUNG TRISNO", 
+        "DESPIA ALIYAWATI", "FAIQ ATA AMRU", "ESTHER ANGGUN SASMITA", 
+        "REGA RINDIANA", "DENDRA RAMADANI", "MOHAMMAD IBAD FEBRIYAN"
+    ];
+
+    let masterNames = defaultNames.map(name => ({ name: name, active: true }));
+    let seats = [];
+
+    // --- ESC KEY LISTENER (IMPROVED) ---
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            const modal = document.getElementById('managerModal');
+            const bulkView = document.getElementById('bulkView');
+            const rowDropdown = document.getElementById("rowDropdown");
+
+            // 1. Jika Bulk Edit kebuka, balik ke Normal View
+            if (modal.style.display === 'block' && bulkView.style.display === 'flex') {
+                hideBulkEdit();
+                return;
+            }
+
+            // 2. Jika Modal Master Data kebuka, tutup modal
+            if (modal.style.display === 'block') {
+                closeManager();
+            }
+
+            // 3. Jika Dropdown Acak Baris kebuka, tutup dropdown
+            if (rowDropdown.classList.contains('show')) {
+                rowDropdown.classList.remove('show');
+            }
+        }
+    });
+
+    function initSeats() {
+        seats = [];
+        for (let i = 0; i < 18; i++) seats.push({ id: i, currentName: "", locked: false });
+        distributeNames();
+        renderSeats();
+    }
+
+    function renderSeats() {
+        const container = document.getElementById('classroom');
+        container.innerHTML = '';
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 6; col++) {
+                const index = row * 6 + col;
+                const seatData = seats[index];
+                const seatDiv = document.createElement('div');
+                const randomRotate = (Math.random() * 1.5 - 0.75).toFixed(2); 
+                if(!seatData.locked) seatDiv.style.transform = `rotate(${randomRotate}deg)`;
+                seatDiv.className = `seat seat-row-${row} ${seatData.locked ? 'is-locked' : ''}`;
+                
+                const lockBox = document.createElement('div');
+                lockBox.className = 'lock-box';
+                lockBox.innerHTML = seatData.locked ? '🔒' : ''; 
+                lockBox.onclick = (e) => { e.stopPropagation(); toggleLock(index); };
+                
+                const numSpan = document.createElement('div');
+                numSpan.className = 'seat-number';
+                numSpan.innerText = col + 1;
+
+                const nameDiv = document.createElement('div');
+                const nameLen = seatData.currentName.length;
+                let sizeClass = "text-normal";
+                if (nameLen > 25) sizeClass = "text-tiny";
+                else if (nameLen > 18) sizeClass = "text-small";
+                else if (nameLen > 12) sizeClass = "text-medium";
+                nameDiv.className = `seat-name ${sizeClass}`;
+                nameDiv.innerText = seatData.currentName;
+
+                seatDiv.appendChild(lockBox);
+                seatDiv.appendChild(numSpan);
+                seatDiv.appendChild(nameDiv);
+                container.appendChild(seatDiv);
+            }
+            const label = document.createElement('div');
+            label.className = `row-label label-r${row}`;
+            label.innerText = `BARIS ${row + 1}`;
+            container.appendChild(label);
+        }
+    }
+
+    function toggleLock(index) {
+        if(seats[index].currentName === "") return;
+        seats[index].locked = !seats[index].locked;
+        renderSeats();
+    }
+
+    function distributeNames() {
+        let lockedNames = seats.filter(s => s.locked && s.currentName).map(s => s.currentName);
+        let availableNames = masterNames.filter(n => n.active).map(n => n.name).filter(name => !lockedNames.includes(name));
+        shuffleArray(availableNames);
+        let targetSeats = seats.filter(s => !s.locked).sort((a,b) => a.id - b.id);
+        targetSeats.forEach(seat => { seat.currentName = availableNames.length > 0 ? availableNames.shift() : ""; });
+    }
+
+    function shuffleSpecificRows(rowIndices) {
+        let targetSeats = [];
+        rowIndices.forEach(rowIndex => {
+            const start = rowIndex * 6;
+            targetSeats = targetSeats.concat(seats.slice(start, start + 6).filter(s => !s.locked));
+        });
+        let namesInPool = targetSeats.map(s => s.currentName).filter(n => n !== "");
+        shuffleArray(namesInPool);
+        targetSeats.forEach((seat, i) => { seat.currentName = namesInPool[i] || ""; });
+        renderSeats();
+        document.getElementById("rowDropdown").classList.remove("show");
+    }
+
+    function shuffleAll() { distributeNames(); renderSeats(); }
+    function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
+
+    function toggleDropdown() { document.getElementById("rowDropdown").classList.toggle("show"); }
+    window.onclick = function(e) { 
+        if (!e.target.matches('#btnRowRandom')) {
+            let dp = document.getElementById("rowDropdown");
+            if (dp.classList.contains('show')) dp.classList.remove('show');
+        }
+        if (e.target == document.getElementById('managerModal')) closeManager();
+    }
+
+    // --- MANAGER & BULK EDIT LOGIC ---
+
+    function openManager() { document.getElementById('managerModal').style.display = "block"; hideBulkEdit(); renderNameList(); }
+    function closeManager() { 
+        document.getElementById('managerModal').style.display = "none";
+        seats.forEach(seat => {
+            const person = masterNames.find(n => n.name === seat.currentName);
+            if (!person || !person.active) { seat.currentName = ""; seat.locked = false; }
+        });
+        renderSeats();
+    }
+
+    function showBulkEdit() {
+        document.getElementById('normalView').style.display = 'none';
+        document.getElementById('bulkView').style.display = 'flex';
+        document.getElementById('btnShowBulk').style.display = 'none'; 
+        
+        const namesText = masterNames.map(n => n.name).join('\n');
+        document.getElementById('bulkEditArea').value = namesText;
+    }
+
+    function hideBulkEdit() {
+        document.getElementById('normalView').style.display = 'block';
+        document.getElementById('bulkView').style.display = 'none';
+        document.getElementById('btnShowBulk').style.display = 'block'; 
+    }
+
+    function saveBulkEdit() {
+        const rawText = document.getElementById('bulkEditArea').value;
+        const newNamesList = rawText.split('\n').map(s => s.trim().toUpperCase()).filter(s => s !== "");
+
+        if (newNamesList.length > 18) {
+            alert(`Terlalu banyak nama! Ada ${newNamesList.length} nama. Maksimal 18.`);
+            return;
+        }
+
+        if (confirm("Simpan data baru ini? List lama akan tertimpa.")) {
+            masterNames = newNamesList.map(name => ({ name: name, active: true }));
+            hideBulkEdit();
+            renderNameList();
+            seats.forEach(s => { s.currentName = ""; s.locked = false; }); 
+            distributeNames(); 
+            renderSeats();
+        }
+    }
+    
+    function eliminateAll() { if(confirm("Tandai semua siswa sebagai absen?")) { masterNames.forEach(n => n.active = false); renderNameList(); }}
+    function restoreAll() { masterNames.forEach(n => n.active = true); renderNameList(); }
+    
+    function resetToDefault() {
+        if(confirm("Kembalikan ke 18 nama asli?")) {
+            masterNames = defaultNames.map(name => ({ name: name, active: true }));
+            renderNameList();
+            renderSeats();
+        }
+    }
+
+    function addName() {
+        if (masterNames.length >= 18) { alert("Kelas sudah penuh!"); return; }
+        const input = document.getElementById('newNameInput');
+        const val = input.value.trim().toUpperCase();
+        if(val) { masterNames.push({name: val, active: true}); input.value=''; renderNameList(); }
+    }
+
+    function deleteName(index) {
+        if(confirm(`Hapus permanen: ${masterNames[index].name}?`)) {
+            masterNames.splice(index, 1);
+            renderNameList();
+        }
+    }
+
+    function editName(index) {
+        const oldName = masterNames[index].name;
+        const newName = prompt("Edit Nama:", oldName);
+        if(newName && newName.trim() !== "") {
+            const upperName = newName.trim().toUpperCase();
+            masterNames[index].name = upperName;
+            seats.forEach(s => { if(s.currentName === oldName) s.currentName = upperName; });
+            renderNameList();
+        }
+    }
+
+    function renderNameList() {
+        const list = document.getElementById('nameListContainer');
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const countSpan = document.getElementById('studentCount');
+        const btnAdd = document.getElementById('btnAdd');
+
+        countSpan.innerText = masterNames.length;
+        btnAdd.disabled = masterNames.length >= 18;
+        btnAdd.title = masterNames.length >= 18 ? "Kelas Penuh" : "Tambah Siswa";
+
+        list.innerHTML = '';
+        masterNames.forEach((item, idx) => {
+            if(item.name.toLowerCase().includes(query)) {
+                const div = document.createElement('div');
+                div.className = `name-item ${!item.active ? 'eliminated' : ''}`;
+                div.innerHTML = `
+                    <span style="flex-grow:1; margin-right:5px; font-size:16px;">${item.name}</span> 
+                    <div class="item-actions">
+                        <button class="action-btn btn-edit" onclick="editName(${idx})" title="Edit">✎</button>
+                        <button class="action-btn btn-del" onclick="deleteName(${idx})" title="Hapus">🗑️</button>
+                        <button class="action-btn btn-status" 
+                            style="color:${item.active ? 'var(--c-red)' : 'var(--c-green)'}; border-color:${item.active ? 'var(--c-red)' : 'var(--c-green)'}" 
+                            onclick="toggleActive(${idx})">
+                            ${item.active ? 'Coret' : 'Pakai'}
+                        </button>
+                    </div>
+                `;
+                list.appendChild(div);
+            }
+        });
+    }
+    
+    function toggleActive(idx) { masterNames[idx].active = !masterNames[idx].active; renderNameList(); }
+
+    initSeats();
+</script>
+</body>
+</html>
